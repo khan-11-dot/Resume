@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>💘 Heart Hacker Proposal – Ultra Final Edition</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #ffd6e5, #ffe0ec);
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .stars span {
+      position: absolute;
+      display: block;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+      text-align: center;
+      position: relative;
+      max-width: 500px;
+      width: 90%;
+      z-index: 2;
+    }
+
+    #title {
+      color: #e91e63;
+      font-size: 30px;
+      min-height: 40px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      margin: 10px;
+      cursor: pointer;
+    }
+
+    #yesBtn {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #f44336;
+      color: white;
+      position: absolute;
+      top: 260px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 22px;
+      color: #880e4f;
+      font-weight: bold;
+    }
+
+    .heart, .emoji, .ring {
+      position: absolute;
+      font-size: 30px;
+      animation: float 3s linear infinite;
+      opacity: 0.9;
+    }
+
+    .heart { color: #ff69b4; }
+    .emoji { color: #ff9800; }
+    .ring { font-size: 40px; animation: ringFall 3s ease-in-out; }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-300px); opacity: 0; }
+    }
+
+    @keyframes ringFall {
+      0% { top: -50px; opacity: 0; }
+      100% { top: 300px; opacity: 1; }
+    }
+
+    .gif {
+      width: 130px;
+      margin-top: 20px;
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translate(1px, 1px) rotate(0deg); }
+      25% { transform: translate(-2px, 1px) rotate(-1deg); }
+      50% { transform: translate(1px, -2px) rotate(1deg); }
+      75% { transform: translate(-1px, 2px) rotate(0deg); }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: red;
+      animation: confetti 2s ease-out forwards;
+    }
+
+    @keyframes confetti {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+  <div class="container" id="box">
+    <h1 id="title"></h1>
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+    <div id="message"></div>
+    <img id="gif" class="gif" src="" alt="">
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const message = document.getElementById("message");
+    const gif = document.getElementById("gif");
+    const music = document.getElementById("bgMusic");
+    const box = document.getElementById("box");
+    const title = document.getElementById("title");
+
+    const questionText = "Will you accept Bilal Ahmad's friendship? 💘";
+    let i = 0;
+
+    function typeWriter() {
+      if (i < questionText.length) {
+        title.innerHTML += questionText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 50);
+      }
+    }
+    typeWriter();
+
+    document.body.addEventListener("click", () => {
+      music.play();
+    }, { once: true });
+
+    yesBtn.addEventListener("click", () => {
+      message.innerText = "Thank you for accepting Bilal Ahmad's friendship! 💖";
+      gif.src = "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif";
+      showHearts();
+      showEmojis();
+      showRings();
+      blastConfetti();
+    });
+
+    noBtn.addEventListener("click", () => {
+      message.innerText = "You cannot run from love! 😈";
+    });
+
+    document.addEventListener("mousemove", function(e) {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const rect = noBtn.getBoundingClientRect();
+
+      const btnX = rect.left + rect.width / 2;
+      const btnY = rect.top + rect.height / 2;
+
+      const distance = Math.hypot(mouseX - btnX, mouseY - btnY);
+
+      if (distance < 100) {
+        let newX = Math.random() * (window.innerWidth - rect.width - 20);
+        let newY = Math.random() * (window.innerHeight - rect.height - 20);
+        noBtn.style.left = `${newX}px`;
+        noBtn.style.top = `${newY}px`;
+        box.classList.add("shake");
+        setTimeout(() => box.classList.remove("shake"), 300);
+      }
+    });
+
+    function showHearts() {
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = window.innerHeight + "px";
+        heart.innerText = "💖";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
+      }
+    }
+
+    function showEmojis() {
+      const faces = ["😍", "🥰", "😘", "😻", "❤️"];
+      for (let i = 0; i < 10; i++) {
+        const emoji = document.createElement("div");
+        emoji.className = "emoji";
+        emoji.innerText = faces[Math.floor(Math.random() * faces.length)];
+        emoji.style.left = Math.random() * window.innerWidth + "px";
+        emoji.style.top = window.innerHeight + "px";
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 3000);
+      }
+    }
+
+    function showRings() {
+      const ring = document.createElement("div");
+      ring.className = "ring";
+      ring.innerText = "💍";
+      ring.style.left = (window.innerWidth / 2 - 20) + "px";
+      ring.style.top = "-50px";
+      ring.style.position = "absolute";
+      document.body.appendChild(ring);
+      setTimeout(() => ring.remove(), 3000);
+    }
+
+    function blastConfetti() {
+      for (let i = 0; i < 30; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.left = `${Math.random() * window.innerWidth}px`;
+        confetti.style.top = "0px";
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 2000);
+      }
+    }
+
+    // Stars
+    const starArea = document.getElementById("stars");
+    for (let i = 0; i < 100; i++) {
+      let star = document.createElement("span");
+      star.style.top = Math.random() * 100 + "%";
+      star.style.left = Math.random() * 100 + "%";
+      starArea.appendChild(star);
+    }
+  </script>
+</body>
+</html>

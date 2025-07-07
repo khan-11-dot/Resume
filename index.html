@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Builder</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: #0f0f1a;
+      color: white;
+      padding-top: 100px;
+      overflow-x: hidden;
+    }
+
+    .shared-bg {
+      position: fixed;
+      width: 300%;
+      height: 300%;
+      top: 0;
+      left: 0;
+      background: radial-gradient(circle at 20% 30%, #ff6ec4, transparent 40%),
+                  radial-gradient(circle at 80% 70%, #007cf0, transparent 40%),
+                  radial-gradient(circle at 50% 50%, #00f2fe, transparent 40%);
+      animation: moveBg 30s linear infinite;
+      filter: blur(120px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes moveBg {
+      0% { transform: translate(0%, 0%) rotate(0deg); }
+      50% { transform: translate(-20%, -10%) rotate(180deg); }
+      100% { transform: translate(0%, 0%) rotate(360deg); }
+    }
+
+    header {
+      background: rgba(21, 21, 40, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h2 {
+      margin-left: 30px;
+      color: #ffa726;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      margin-right: 30px;
+      gap: 30px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #ffa726;
+    }
+
+    #home {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    #home h1 {
+      font-size: 42px;
+      margin-bottom: 5px;
+    }
+
+    #home p {
+      max-width: 700px;
+      margin: 10px auto 30px auto;
+      font-size: 18px;
+    }
+
+    .template-preview-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    .template1-resume,
+    .template3-resume {
+      display: flex;
+      width: 90%;
+      max-width: 950px;
+      background: #fff;
+      color: #222;
+      border-radius: 10px;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+
+    .left-column {
+      width: 35%;
+      background: #1e1e2f;
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .profile-pic {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid #ffa726;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .section {
+      width: 100%;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .section h3 {
+      color: #ffa726;
+      font-size: 14px;
+      margin-bottom: 5px;
+      border-bottom: 1px solid #ffa726;
+    }
+
+    .section p,
+    .section li {
+      font-size: 13px;
+      margin: 4px 0;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .right-column {
+      width: 65%;
+      padding: 20px;
+    }
+
+    .use-btn {
+      margin-top: 10px;
+      background: #ffa726;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .use-btn:hover {
+      background: #fb8c00;
+    }
+
+    .template3-left {
+      width: 35%;
+      background: #f4f4f4;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .template3-left img {
+      width: 120px;
+      height: 120px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+
+    .template3-left h2 {
+      font-size: 18px;
+      margin-bottom: 0;
+    }
+
+    .template3-left h2 span {
+      color: #ffc107;
+      font-weight: bold;
+    }
+
+    .template3-left p {
+      font-size: 13px;
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    .template3-left .section h4 {
+      font-size: 13px;
+      color: #222;
+      margin-bottom: 5px;
+      border-bottom: 1px solid #ffc107;
+    }
+
+    .template3-left .section li {
+      font-size: 12px;
+      margin: 5px 0;
+    }
+
+    .template3-right {
+      width: 65%;
+      padding: 25px;
+    }
+
+    .template3-right .section h3 {
+      font-size: 16px;
+      color: #333;
+      border-bottom: 2px solid #ffc107;
+      margin-bottom: 5px;
+    }
+
+    .template3-right .section p {
+      font-size: 13px;
+      color: #444;
+      margin: 4px 0;
+    }
+
+    footer {
+      background: rgba(21, 21, 40, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      text-align: center;
+      color: #aaa;
+    }
+
+    .socials a {
+      color: white;
+      margin: 0 10px;
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    .socials a:hover {
+      color: #ffa726;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shared-bg"></div>
+
+  <header>
+    <h2>Resume Builder</h2>
+    <nav>
+      <ul>
+        <li><a href="/login.html">LOGIN</a></li>
+        <li><a href="/resume-builder.html">Resume Preview</a></li>
+          <li><a href="/contact.html">Contract Us</a></li>
+          <li><a href="/pro.html">For Entertainment</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home">
+    <h1>Create a Professional Resume in Minutes!</h1>
+    <p>Our modern resume builder helps you craft stunning, job-ready resumes with ease. Launching soon — be the first to experience it!</p>
+
+    <div class="template-preview-container">
+      <div class="template1-resume">
+        <div class="left-column">
+          <img src="/images/profile.jpg" alt="Profile Picture" class="profile-pic" />
+          <h2>Nina Lane</h2>
+          <p class="title">Graphic Designer</p>
+          <div class="section">
+            <h3>Contact</h3>
+            <p>Email: nina@email.com</p>
+            <p>Phone: 123-456-7890</p>
+          </div>
+          <div class="section">
+            <h3>Skills</h3>
+            <ul>
+              <li>Photoshop</li>
+              <li>Illustrator</li>
+              <li>Figma</li>
+            </ul>
+          </div>
+        </div>
+        <div class="right-column">
+          <div class="section">
+            <h3>Profile</h3>
+            <p>Creative designer with 5+ years of experience crafting visual identities.</p>
+          </div>
+          <div class="section">
+            <h3>Experience</h3>
+            <p><strong>Senior Designer</strong> - ABC Studio</p>
+          </div>
+          <div class="section">
+            <h3>Education</h3>
+            <p><strong>BFA</strong> - Design School</p>
+          </div>
+        </div>
+      </div>
+      <a href="/Templates/temp1.html?template=1">
+        <button class="use-btn">Use This Template</button>
+      </a>
+    </div>
+
+    <div class="template-preview-container">
+      <div class="template3-resume">
+        <div class="template3-left">
+          <img src="/images/profile3.jpg" alt="James" />
+          <h2>JAMES <span>CHRISTOPHER</span></h2>
+          <p>Creative Designer</p>
+          <div class="section">
+            <h4>Contacts</h4>
+            <ul>
+              <li>📞 +012 456 7896</li>
+              <li>✉️ person@domain.com</li>
+              <li>📍 123 Dummy Street, NY</li>
+            </ul>
+          </div>
+          <div class="section">
+            <h4>Skills</h4>
+            <ul>
+              <li>Photoshop</li>
+              <li>Typography</li>
+              <li>Illustrator</li>
+              <li>Photography</li>
+              <li>Print Design</li>
+              <li>Graphic Design</li>
+            </ul>
+          </div>
+        </div>
+        <div class="template3-right">
+          <div class="section">
+            <h3>Profile</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+          </div>
+          <div class="section">
+            <h3>Work Experience</h3>
+            <p><strong>2011 - 2014</strong><br>Graphic Designer - Company Name</p>
+            <p><strong>2014 - 2016</strong><br>Sr. Graphic Designer - Company Name</p>
+            <p><strong>2016 - Present</strong><br>Creative Director - Company Name</p>
+          </div>
+          <div class="section">
+            <h3>Education</h3>
+            <p><strong>2004</strong> - Diploma in Graphic Design - University of Name</p>
+            <p><strong>2008</strong> - Bachelor of Fine Arts - University of Name</p>
+          </div>
+        </div>
+      </div>
+      <a href="/Templates/temp2.html?template=3">
+        <button class="use-btn">Use This Template</button>
+      </a>
+    </div>
+
+    <!-- How It Works Section -->
+    <section style="margin-top: 60px; padding: 60px 20px; background: rgba(255,255,255,0.05); text-align: center;">
+      <h2 style="font-size: 30px; color: #ffa726;">How It Works</h2>
+      <p style="max-width: 700px; margin: 10px auto 30px; color: #ccc;">Build your resume in 3 simple steps.</p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+        <div><h3 style="color:white;">1. Choose Template</h3><p style="color:#aaa;">Select a stunning layout</p></div>
+        <div><h3 style="color:white;">2. Enter Details</h3><p style="color:#aaa;">Fill in your information</p></div>
+        <div><h3 style="color:white;">3. Export PDF</h3><p style="color:#aaa;">Download your resume instantly</p></div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section style="padding: 60px 20px; background: #141426; text-align: center;">
+      <h2 style="font-size: 30px; color: #ffa726;">What Users Say</h2>
+      <p style="color:#ccc; margin-bottom: 30px;">Real feedback from happy job seekers.</p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+        <div style="max-width: 300px; color: #fff;"><p>“Best resume builder I’ve ever used!”</p><strong>- Ahsan Raza</strong></div>
+        <div style="max-width: 300px; color: #fff;"><p>“Helped me get my first interview within days.”</p><strong>- Sarah Khan</strong></div>
+        <div style="max-width: 300px; color: #fff;"><p>“Simple, elegant, and effective.”</p><strong>- Usman Malik</strong></div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section style="padding: 60px 20px; background: #0d0d17; text-align: center;">
+      <h2 style="font-size: 28px; color: #fff;">Ready to Create Your Resume?</h2>
+      <p style="color: #ccc;">Start building your professional resume today — it's free and easy!</p>
+      <a href="/resume-builder.html"><button class="use-btn" style="margin-top: 20px;">Get Started</button></a>
+    </section>
+
+  </section>
+  <section style="padding: 60px 20px; background: #121225; text-align: center;">
+  <h2 style="color: #ffa726; font-size: 28px;">Recommended Jobs for You</h2>
+  <p style="color: #ccc; margin-bottom: 30px;">Based on your skills and experience</p>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+    
+    <div style="background: #1f1f33; border-radius: 10px; padding: 20px; width: 280px; text-align: left; color: white;">
+      <h3 style="color: #ffa726;">UI/UX Designer</h3>
+      <p style="margin: 5px 0;">🎯 Company: Creative Minds</p>
+      <p style="margin: 5px 0;">📍 Remote</p>
+      <p style="margin: 5px 0;"><span style="background:#ffa726; padding:2px 6px; border-radius:4px; font-size:12px;">Full-time</span></p>
+    </div>
+
+    <div style="background: #1f1f33; border-radius: 10px; padding: 20px; width: 280px; text-align: left; color: white;">
+      <h3 style="color: #ffa726;">Graphic Designer</h3>
+      <p style="margin: 5px 0;">🎯 Company: PixelCraft</p>
+      <p style="margin: 5px 0;">📍 Lahore, PK</p>
+      <p style="margin: 5px 0;"><span style="background:#ffa726; padding:2px 6px; border-radius:4px; font-size:12px;">Contract</span></p>
+    </div>
+
+    <div style="background: #1f1f33; border-radius: 10px; padding: 20px; width: 280px; text-align: left; color: white;">
+      <h3 style="color: #ffa726;">Junior Web Developer</h3>
+      <p style="margin: 5px 0;">🎯 Company: CodeNinja</p>
+      <p style="margin: 5px 0;">📍 Islamabad, PK</p>
+      <p style="margin: 5px 0;"><span style="background:#ffa726; padding:2px 6px; border-radius:4px; font-size:12px;">Internship</span></p>
+    </div>
+
+  </div>
+
+  <a href="#" style="display: inline-block; margin-top: 30px;">
+    <button style="padding: 12px 25px; background-color: #ffa726; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+      View More Jobs
+    </button>
+  </a>
+</section>
+
+  <footer>
+    <div class="socials">
+      <a href="#">🌐</a>
+      <a href="#">🐦</a>
+      <a href="#">📸</a>
+      <a href="#">▶️</a>
+    </div>
+    <p style="margin-top:10px;">© 2025 Resume Builder. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

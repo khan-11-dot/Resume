@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editable Resume Template 3</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #121221;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      text-align: center;
+      color: #ffa726;
+    }
+
+    .resume-container {
+      width: 210mm;
+      height: 297mm;
+      background: white;
+      color: black;
+      margin: 20px auto;
+      display: flex;
+      box-shadow: 0 0 15px rgba(255, 167, 38, 0.8);
+      font-family: 'Segoe UI', sans-serif;
+      position: relative;
+    }
+
+    .left-column {
+      width: 35%;
+      background: #f3f3f3;
+      padding: 25px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .right-column {
+      width: 65%;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    .left-column img {
+      width: 120px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 3px solid #ffa726;
+    }
+
+    .upload-btn {
+      background: #ffa726;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .editable {
+      cursor: text;
+      padding: 3px;
+      border-bottom: 1px dashed transparent;
+    }
+
+    .editable:focus {
+      outline: none;
+      border-bottom: 1px dashed #ffa726;
+      background: #ffffe0;
+    }
+
+    h2 span {
+      color: #ffc107;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section h3 {
+      font-size: 16px;
+      border-bottom: 2px solid #ffc107;
+      padding-bottom: 5px;
+      color: #222;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .add-btn, .remove-btn {
+      background: #ffa726;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 2px 6px;
+      margin-left: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .download-btn, .new-section-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background: #ffa726;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .hide-in-pdf {
+      display: inline;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Editable Resume - Template 3</h1>
+
+<div class="resume-container" id="resume-content">
+  <div class="left-column">
+    <img src="https://i.pravatar.cc/120" id="img1" />
+    <label class="upload-btn hide-in-pdf">
+      Upload Photo
+      <input type="file" accept="image/*" onchange="uploadImage(event, 'img1')" style="display: none;" />
+    </label>
+    <h2 class="editable" contenteditable="true">JAMES <span>CHRISTOPHER</span></h2>
+    <p class="editable" contenteditable="true">Creative Designer</p>
+
+    <div class="section">
+      <h3>CONTACT</h3>
+      <p class="editable" contenteditable="true">📞 +012 456 7896</p>
+      <p class="editable" contenteditable="true">✉️ person@domain.com</p>
+      <p class="editable" contenteditable="true">📍 123 Dummy Street, New York</p>
+    </div>
+
+    <div class="section">
+      <h3>SKILLS 
+        <button class="add-btn hide-in-pdf" onclick="addItem('skills')">+</button>
+      </h3>
+      <ul id="skills">
+        <li class="editable" contenteditable="true">Photoshop <button class="remove-btn hide-in-pdf" onclick="removeItem(this)">x</button></li>
+        <li class="editable" contenteditable="true">Typography <button class="remove-btn hide-in-pdf" onclick="removeItem(this)">x</button></li>
+        <li class="editable" contenteditable="true">Print Design <button class="remove-btn hide-in-pdf" onclick="removeItem(this)">x</button></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>INTERESTS 
+        <button class="add-btn hide-in-pdf" onclick="addItem('interests')">+</button>
+      </h3>
+      <ul id="interests">
+        <li class="editable" contenteditable="true">Art <button class="remove-btn hide-in-pdf" onclick="removeItem(this)">x</button></li>
+        <li class="editable" contenteditable="true">Photography <button class="remove-btn hide-in-pdf" onclick="removeItem(this)">x</button></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="right-column" id="right-column">
+    <div class="section">
+      <h3>PROFILE</h3>
+      <p class="editable" contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+
+    <div class="section">
+      <h3>WORK EXPERIENCE</h3>
+      <p class="editable" contenteditable="true"><strong>2011–2014:</strong> Graphic Designer — Company Name</p>
+      <p class="editable" contenteditable="true"><strong>2014–2016:</strong> Sr. Graphic Designer — Company Name</p>
+      <p class="editable" contenteditable="true"><strong>2016–Present:</strong> Creative Director — Company Name</p>
+    </div>
+
+    <div class="section">
+      <h3>EDUCATION</h3>
+      <p class="editable" contenteditable="true"><strong>2004:</strong> Diploma in Graphic Design — University of Name</p>
+      <p class="editable" contenteditable="true"><strong>2008:</strong> BFA — University of Name, NY</p>
+    </div>
+  </div>
+</div>
+
+<button class="new-section-btn hide-in-pdf" onclick="addNewSection()">Add New Section</button>
+<button class="download-btn" onclick="downloadPDF()">Download as PDF</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  function uploadImage(event, imgId) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      document.getElementById(imgId).src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  function downloadPDF() {
+    document.querySelectorAll('.hide-in-pdf').forEach(el => el.style.display = 'none');
+    const element = document.getElementById("resume-content");
+    const opt = {
+      margin: 0,
+      filename: 'resume-template3.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save().then(() => {
+      document.querySelectorAll('.hide-in-pdf').forEach(el => el.style.display = 'inline-block');
+    });
+  }
+
+  function addItem(sectionId) {
+    const ul = document.getElementById(sectionId);
+    const li = document.createElement("li");
+    li.className = "editable";
+    li.contentEditable = true;
+    li.innerHTML = "New Item <button class='remove-btn hide-in-pdf' onclick='removeItem(this)'>x</button>";
+    ul.appendChild(li);
+  }
+
+  function removeItem(button) {
+    button.parentElement.remove();
+  }
+
+  function addNewSection() {
+    const right = document.getElementById("right-column");
+    const newSection = document.createElement("div");
+    newSection.className = "section";
+
+    const title = document.createElement("h3");
+    title.className = "editable";
+    title.contentEditable = true;
+    title.innerText = "New Section Title";
+
+    const content = document.createElement("p");
+    content.className = "editable";
+    content.contentEditable = true;
+    content.innerText = "New section content...";
+
+    newSection.appendChild(title);
+    newSection.appendChild(content);
+    right.appendChild(newSection);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jessica Whitehead Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f4f4f4; padding: 20px; }
+    #downloadBtn, #imageBtn {
+      margin: 10px auto;
+      display: block;
+      padding: 10px 20px;
+      background: #D2665B;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .resume {
+      display: flex;
+      max-width: 1000px;
+      margin: auto;
+      border-radius: 15px;
+      overflow: hidden;
+      background: white;
+    }
+    .left {
+      background-color: #D2665B;
+      color: white;
+      width: 35%;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-right: 2px solid white;
+    }
+    .photo-wrapper {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 4px solid white;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .photo-upload-below.no-print {
+      margin-bottom: 20px;
+    }
+    .photo-upload-below.no-print label {
+      background: #fff;
+      color: #D2665B;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .photo-upload-below.no-print input { display: none; }
+    .contact-info, .section-left {
+      width: 100%;
+      margin-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.7);
+      padding-top: 15px;
+    }
+    .contact-info p, .section-left ul li {
+      font-size: 14px;
+      margin: 8px 0;
+    }
+    .section-left h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+      padding-bottom: 5px;
+    }
+    .section-left ul { padding-left: 20px; }
+    .right {
+      width: 65%;
+      padding: 30px 40px;
+    }
+    .right h1 { font-size: 32px; font-weight: 700; margin-bottom: 10px; }
+    .right h2 { font-size: 18px; font-weight: 500; color: #555; margin-bottom: 20px; }
+    .section { margin-bottom: 30px; }
+    .section h3 {
+      background-color: #8B4513;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 10px;
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    .section p { font-size: 15px; line-height: 1.6; }
+    .job-title { font-weight: 600; color: #000; margin-top: 10px; }
+    .job-date { font-weight: 600; color: #000; float: right; }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #A94442;
+      font-size: 14px;
+    }
+    [contenteditable="true"]:hover { background: #ffe; }
+    .add-remove-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .add-remove-btns button {
+      background: #fff;
+      border: none;
+      padding: 5px 10px;
+      font-size: 12px;
+      color: #D2665B;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    @media print {
+      #downloadBtn, #imageBtn, .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <button id="downloadBtn">📄 Download PDF</button>
+  <button id="imageBtn">📸 Download as Image</button>
+
+  <div id="resume" class="resume">
+    <div class="left">
+      <div class="photo-wrapper">
+        <img id="profileImage" src="https://i.imgur.com/7tW7nCE.jpg" alt="Profile">
+      </div>
+      <div class="photo-upload-below no-print">
+        <label for="photoInput">Change Photo</label>
+        <input type="file" id="photoInput" accept="image/*" onchange="loadPhoto(event)">
+      </div>
+      <div class="contact-info">
+        <p contenteditable="true">📞 210-789-8829</p>
+        <p contenteditable="true">✉️ name@companyname.com</p>
+        <p contenteditable="true">📍 108 N Platinum Ave, Deming, NY 88030</p>
+      </div>
+      <div class="section-left">
+        <h3>Education</h3>
+        <div id="education-container">
+          <p contenteditable="true">XYZ High School, Anytown, USA – Graduation: June 2026</p>
+        </div>
+        <div class="add-remove-btns no-print">
+          <button onclick="addEducation()">Add</button>
+          <button onclick="removeEducation()">Remove</button>
+        </div>
+      </div>
+      <div class="section-left">
+        <h3>Personal Skills</h3>
+        <ul>
+          <li contenteditable="true">Java</li>
+          <li contenteditable="true">Python</li>
+          <li contenteditable="true">HTML & CSS</li>
+          <li contenteditable="true">Microsoft Office</li>
+        </ul>
+      </div>
+      <div class="section-left">
+        <h3>Languages</h3>
+        <ul id="languages-list">
+          <li contenteditable="true">English – Fluent</li>
+          <li contenteditable="true">Spanish – Intermediate</li>
+        </ul>
+        <div class="add-remove-btns no-print">
+          <button onclick="addLanguage()">Add</button>
+          <button onclick="removeLanguage()">Remove</button>
+        </div>
+      </div>
+      <div class="section-left">
+        <h3>Achievements</h3>
+        <ul id="achievements-list">
+          <li contenteditable="true">Won Regional Coding Competition</li>
+          <li contenteditable="true">Debate Championship Runner-up</li>
+        </ul>
+        <div class="add-remove-btns no-print">
+          <button onclick="addAchievement()">Add</button>
+          <button onclick="removeAchievement()">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <h1 contenteditable="true">Jessica Whitehead</h1>
+      <h2 contenteditable="true">High School Student</h2>
+      <div class="section">
+        <h3>Objective</h3>
+        <p contenteditable="true">Motivated high school student with a passion for computer science seeking an internship opportunity to further develop technical skills and contribute to a dynamic team.</p>
+      </div>
+      <div class="section">
+        <h3>Work Experience</h3>
+        <p class="job-title" contenteditable="true">Part-time Sales Associate <span class="job-date" contenteditable="true">June 2024 - Present</span></p>
+        <p contenteditable="true">ABC Clothing Store, Anytown, USA</p>
+        <p contenteditable="true">Assist customers in selecting and purchasing merchandise, providing exceptional customer service.</p>
+      </div>
+      <div class="section">
+        <h3>Extracurricular Activities</h3>
+        <p contenteditable="true"><strong>Robotics Club (2023–2025):</strong> President, High School Robotics Club</p>
+        <p contenteditable="true"><strong>Debate Team (2022–2023):</strong> Member, XYZ High School Debate Team</p>
+      </div>
+      <div class="section">
+        <h3>Certifications</h3>
+        <p contenteditable="true">Python for Beginners – Coursera</p>
+        <p contenteditable="true">Web Development Bootcamp – Udemy</p>
+      </div>
+      <div class="section">
+        <h3>Hobbies</h3>
+        <p contenteditable="true">Reading tech blogs, playing chess, participating in hackathons</p>
+      </div>
+      <div class="section">
+        <h3>References</h3>
+        <p contenteditable="true">Available upon request</p>
+      </div>
+      <div class="footer" contenteditable="true">
+        LinkedIn: @yourusernamehere
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Message Below Resume -->
+  <p style="text-align:center; color:#888; font-size:13px; margin-top:20px;" class="no-print">
+    ⚠️ If you experience any issue downloading the resume, please refresh the page and try again.
+  </p>
+
+  <script>
+    function loadPhoto(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('profileImage').src = e.target.result;
+      };
+      if (file) reader.readAsDataURL(file);
+    }
+
+    function addLanguage() {
+      const ul = document.getElementById('languages-list');
+      const li = document.createElement('li');
+      li.contentEditable = true;
+      li.innerText = 'New Language – Level';
+      ul.appendChild(li);
+    }
+
+    function removeLanguage() {
+      const ul = document.getElementById('languages-list');
+      if (ul.children.length > 0) ul.removeChild(ul.lastElementChild);
+    }
+
+    function addAchievement() {
+      const ul = document.getElementById('achievements-list');
+      const li = document.createElement('li');
+      li.contentEditable = true;
+      li.innerText = 'New Achievement';
+      ul.appendChild(li);
+    }
+
+    function removeAchievement() {
+      const ul = document.getElementById('achievements-list');
+      if (ul.children.length > 0) ul.removeChild(ul.lastElementChild);
+    }
+
+    function addEducation() {
+      const container = document.getElementById('education-container');
+      const p = document.createElement('p');
+      p.contentEditable = true;
+      p.innerText = 'New Education Entry';
+      container.appendChild(p);
+    }
+
+    function removeEducation() {
+      const container = document.getElementById('education-container');
+      const items = container.querySelectorAll('p[contenteditable="true"]');
+      if (items.length > 0) container.removeChild(items[items.length - 1]);
+    }
+
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const resume = document.getElementById("resume");
+      const clone = resume.cloneNode(true);
+      clone.querySelectorAll(".no-print").forEach(el => el.remove());
+
+      const opt = {
+        margin: 0,
+        filename: 'Jessica_Whitehead_Resume.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(clone).save();
+    });
+
+    document.getElementById("imageBtn").addEventListener("click", () => {
+      const resume = document.getElementById("resume");
+      html2canvas(resume, { scale: 2, useCORS: true }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Jessica_Whitehead_Resume.png';
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>

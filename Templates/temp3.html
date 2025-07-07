@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resume with Addable Side & Main Sections</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6D5BBA, #8E44AD);
+    }
+
+    * {
+      box-sizing: border-box;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .resume-container {
+      width: 210mm;
+      height: 297mm;
+      background: #fff;
+      margin: 20mm auto;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      display: flex;
+      overflow: hidden;
+    }
+
+    @page { size: A4; margin: 0; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: none; }
+      .resume-container { box-shadow: none; margin: 0; border: 1px solid #000; }
+    }
+
+    .side-panel {
+      background: #2C3E50;
+      color: #ECF0F1;
+      width: 30%;
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-right: 1px solid #ddd;
+    }
+
+    .side-panel img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid #ECF0F1;
+      margin-bottom: 15px;
+      object-fit: cover;
+    }
+
+    .main-panel {
+      flex: 1;
+      padding: 20px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .side-panel h2, .main-panel h2, .side-panel h3 {
+      margin: 10px 0 5px;
+      border-bottom: 1px solid #ECF0F1;
+      padding-bottom: 5px;
+      cursor: text;
+    }
+
+    .main-panel h2 {
+      color: #2C3E50;
+    }
+
+    .section {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      background: linear-gradient(to bottom right, #f9f9ff, #e6e6ff);
+      color: #333;
+    }
+
+    .side-panel .section {
+      background: linear-gradient(to bottom right, #3c4f65, #2C3E50);
+      color: #ecf0f1;
+      border: 1px solid #444;
+      width: 100%;
+    }
+
+    .section ul {
+      padding-left: 20px;
+      list-style: disc;
+      margin: 0;
+    }
+
+    ul li {
+      margin: 5px 0;
+      position: relative;
+    }
+
+    ul li span.delete {
+      color: red;
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      font-weight: bold;
+    }
+
+    .editable {
+      cursor: text;
+    }
+
+    .editable:focus {
+      background: #fff6cc;
+      outline: none;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+      background: #1ABC9C;
+      border: none;
+      color: white;
+      font-size: 14px;
+      border-radius: 3px;
+    }
+
+    button:hover {
+      background: #149174;
+    }
+
+    input[type="file"].no-print {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .center {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="resume-container" id="resume">
+    <div class="side-panel">
+      <img id="profilePic" src="https://via.placeholder.com/150" alt="Profile Photo">
+      <input type="file" id="photoUpload" class="no-print">
+      <div class="section">
+        <h2 contenteditable="true">Full Name</h2>
+        <p contenteditable="true">Job Title</p>
+      </div>
+      <div class="section">
+        <h3>Contact</h3>
+        <p contenteditable="true">email@example.com</p>
+        <p contenteditable="true">+1 234 567 890</p>
+      </div>
+      <div class="section">
+        <h3>Address</h3>
+        <p contenteditable="true">City, Country</p>
+      </div>
+
+      <div id="extraSideSections"></div>
+      <button class="no-print" onclick="addSideSection()">+ Add Side Section</button>
+    </div>
+
+    <div class="main-panel" id="mainPanel">
+      <div class="section">
+        <h2 contenteditable="true">Professional Summary</h2>
+        <p contenteditable="true">Brief summary of experience and skills.</p>
+      </div>
+
+      <div class="section">
+        <h2>Education</h2>
+        <ul id="educationList">
+          <li contenteditable="true">B.Sc. Computer Science - University (2020) <span class="delete no-print" onclick="removeItem(this)">×</span></li>
+          <li contenteditable="true">Intermediate - College (2016) <span class="delete no-print" onclick="removeItem(this)">×</span></li>
+        </ul>
+        <button class="no-print" onclick="addEducation()">Add Education</button>
+      </div>
+
+      <div class="section">
+        <h2>Skills</h2>
+        <ul id="skillsList">
+          <li contenteditable="true">Skill 1 <span class="delete no-print" onclick="removeItem(this)">×</span></li>
+          <li contenteditable="true">Skill 2 <span class="delete no-print" onclick="removeItem(this)">×</span></li>
+        </ul>
+        <button class="no-print" onclick="addSkill()">Add Skill</button>
+      </div>
+
+      <div class="section">
+        <h2>Interests</h2>
+        <ul id="interestsList">
+          <li contenteditable="true">Interest 1 <span class="delete no-print" onclick="removeItem(this)">×</span></li>
+          <li contenteditable="true">Interest 2 <span class="delete no-print" onclick="removeItem(this)">×</span></li>
+        </ul>
+        <button class="no-print" onclick="addInterest()">Add Interest</button>
+      </div>
+
+      <div id="extraSections"></div>
+    </div>
+  </div>
+
+  <div class="center no-print">
+    <button onclick="addCustomSection()">+ Add Main Section</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    document.getElementById('photoUpload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          document.getElementById('profilePic').src = event.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function addSkill() {
+      const li = document.createElement('li');
+      li.contentEditable = true;
+      li.innerHTML = 'New Skill <span class="delete no-print" onclick="removeItem(this)">×</span>';
+      document.getElementById('skillsList').appendChild(li);
+    }
+
+    function addInterest() {
+      const li = document.createElement('li');
+      li.contentEditable = true;
+      li.innerHTML = 'New Interest <span class="delete no-print" onclick="removeItem(this)">×</span>';
+      document.getElementById('interestsList').appendChild(li);
+    }
+
+    function addEducation() {
+      const li = document.createElement('li');
+      li.contentEditable = true;
+      li.innerHTML = 'New Education Entry <span class="delete no-print" onclick="removeItem(this)">×</span>';
+      document.getElementById('educationList').appendChild(li);
+    }
+
+    function addCustomSection() {
+      const section = document.createElement('div');
+      section.className = 'section';
+      section.innerHTML = `
+        <h2 contenteditable="true">
+          New Section 
+          <span class="delete no-print" onclick="removeSection(this)" style="float:right; color:red; cursor:pointer;">×</span>
+        </h2>
+        <p contenteditable="true">Section content goes here...</p>
+      `;
+      document.getElementById('extraSections').appendChild(section);
+    }
+
+    function addSideSection() {
+      const section = document.createElement('div');
+      section.className = 'section';
+      section.innerHTML = `
+        <h3 contenteditable="true">
+          New Side Section 
+          <span class="delete no-print" onclick="removeSection(this)" style="float:right; color:red; cursor:pointer;">×</span>
+        </h3>
+        <p contenteditable="true">Details...</p>
+      `;
+      document.getElementById('extraSideSections').appendChild(section);
+    }
+
+    function removeItem(span) {
+      span.parentElement.remove();
+    }
+
+    function removeSection(span) {
+      span.closest('.section').remove();
+    }
+
+    function downloadPDF() {
+      document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+      const element = document.getElementById('resume');
+      const opt = {
+        margin: 0,
+        filename: 'resume.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 3, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save().then(() => {
+        document.querySelectorAll('.no-print').forEach(el => el.style.display = '');
+      });
+    }
+  </script>
+</body>
+</html>
