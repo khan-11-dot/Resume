@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced CV Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #FFC107 50%, #E0E0E0 50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .cv-container {
+            width: 210mm; /* A4 width */
+            height: 297mm; /* A4 height */
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+        }
+        .header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .header h2 {
+            margin: 5px 0 0;
+            font-size: 16px;
+            font-weight: normal;
+        }
+        .content {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .section {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            margin: 0;
+        }
+        .section p, .section ul {
+            margin: 10px 0 0 20px;
+        }
+        .section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .section ul li {
+            margin: 5px 0;
+        }
+        .skills ul li {
+            display: flex;
+            align-items: center;
+        }
+        .skills .progress {
+            width: 70%;
+            height: 10px;
+            background: #ddd;
+            margin-left: 10px;
+        }
+        .contact {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+        <div class="header">
+            <img src="https://via.placeholder.com/100" alt="Profile Photo">
+            <h1>Stephen Mc Klor</h1>
+            <h2>Design Manager</h2>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h3>About Me</h3>
+                <p>Creative and detail-oriented Design Manager with over 5 years of experience in leading innovative design projects. Passionate about delivering high-quality visual solutions.</p>
+            </div>
+            <div class="section">
+                <h3>Education</h3>
+                <p><strong>2009-2013</strong> - Bachelor of Design, College Name, City</p>
+                <p><strong>2013-2015</strong> - Master of Design, University Name, City</p>
+            </div>
+            <div class="section">
+                <h3>Experience</h3>
+                <ul>
+                    <li><strong>2015-2018</strong> - Junior Designer, Company Name, City
+                        <ul><li>Designed marketing materials for 10+ clients.</li></ul>
+                    </li>
+                    <li><strong>2018-Present</strong> - Design Manager, Company Name, City
+                        <ul><li>Led a team of 5 designers on major projects.</li></ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="section skills">
+                <h3>Skills</h3>
+                <ul>
+                    <li>Adobe Photoshop <div class="progress" style="width: 80%; background: linear-gradient(to right, #333 80%, #ddd 80%);"></div></li>
+                    <li>Illustrator <div class="progress" style="width: 70%; background: linear-gradient(to right, #333 70%, #ddd 70%);"></div></li>
+                    <li>UI/UX Design <div class="progress" style="width: 60%; background: linear-gradient(to right, #333 60%, #ddd 60%);"></div></li>
+                </ul>
+            </div>
+            <div class="section">
+                <h3>Language</h3>
+                <ul>
+                    <li>English - Fluent</li>
+                    <li>Spanish - Intermediate</li>
+                </ul>
+            </div>
+        </div>
+        <div class="contact">
+            <p><strong>Contact</strong><br>Email: stephen@example.com<br>Phone: +123-456-7890<br>LinkedIn: linkedin.com/in/stephenmcklor</p>
+        </div>
+    </div>
+</body>
+</html>

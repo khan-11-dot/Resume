@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Resume - [YOUR NAME]</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* A4 Paper Size for Print/PDF - Crucial for one-page fit */
+    @page {
+      size: A4;
+      margin: 0; /* Remove default margins for max content space */
+    }
+
+    .container {
+      /* A4 is 210mm wide. To get approximately 5mm total side margin (2.5mm on each side) */
+      /* Content width + padding should be 205mm. */
+      /* With 10mm padding on each side, the element itself needs to be 185mm wide. */
+      width: 185mm; /* This sets the content area width */
+      
+      /* A4 is 297mm high. */
+      /* With 2.5mm top/bottom margins, available height for container is 292mm. */
+      /* Container padding (2*10mm) and content (min-height) fill this. */
+      min-height: 272mm; /* Ensures the container has enough space vertically */
+      
+      margin: 2.5mm auto; /* Minimal 2.5mm top/bottom margin, auto for horizontal centering */
+      padding: 10mm; /* Internal padding for content within the resume block */
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+      box-sizing: border-box; /* Ensures padding is included in the width/height calculation */
+      overflow: hidden; /* Important for html2canvas to capture everything within bounds */
+    }
+
+    /* Elegant Line Borders */
+    .border-frame {
+        position: absolute;
+        top: 2.5mm; /* Inset from the container's top/left/right/bottom edge by 2.5mm */
+        left: 2.5mm;
+        right: 2.5mm;
+        bottom: 2.5mm;
+        border: 2px solid #a3b18a;
+        pointer-events: none; /* Allows clicks to pass through to content */
+    }
+    .border-inner-frame {
+        position: absolute;
+        top: 2.5mm; /* Inset from the outer frame */
+        left: 2.5mm;
+        right: 2.5mm;
+        bottom: 2.5mm;
+        border: 1px solid #c8d3b8;
+        pointer-events: none;
+    }
+
+    /* Font Sizes & Spacing - Optimized for one-page fit with wider layout */
+    h1 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+    .contact-info {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .contact-info span {
+      margin: 0 6px;
+    }
+    h2 {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+      color: #2c3e50;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    p, li {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .section {
+      margin-bottom: 18px;
+      position: relative;
+      page-break-after: auto; /* Default for screen, print will override */
+    }
+
+    /* Print media specific styles (for PDF generation) */
+    @media print {
+        .section {
+            page-break-after: avoid; /* Heavily discourages page breaks within sections */
+            page-break-inside: avoid; /* Keeps content within section on one page if possible */
+        }
+        .experience-item, .education-item {
+            page-break-inside: avoid; /* Keeps individual items on one page */
+        }
+        .controls {
+            display: none !important; /* Hide control buttons in print/PDF */
+        }
+    }
+
+    /* Item specific styling */
+    .experience-item, .education-item {
+      margin-bottom: 15px;
+      border: 1px dashed #eee;
+      padding: 12px;
+      margin-top: 8px;
+      position: relative;
+    }
+    .experience-item strong, .education-item strong {
+      font-size: 16px;
+      color: #333;
+    }
+    .experience-item p.location-date, .education-item p.location-date {
+      font-size: 13px;
+      color: #777;
+      margin-top: 2px;
+      margin-bottom: 6px;
+    }
+    .skills ul {
+      list-style: none;
+      padding-left: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .skills ul li {
+      background-color: #e9e9e9;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #444;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .key-skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 8px;
+        list-style: none;
+        padding: 0;
+    }
+    .key-skills-grid li {
+        margin-bottom: 4px;
+        background-color: #e9e9e9;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #444;
+        position: relative;
+    }
+
+    /* Button Styling */
+    .add-btn, .remove-btn, .download-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 7px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        margin-top: 8px;
+        margin-right: 4px;
+        transition: background-color 0.3s ease;
+    }
+    .remove-btn {
+        background-color: #f44336;
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+    .add-btn:hover {
+        background-color: #45a049;
+    }
+    .remove-btn:hover {
+        background-color: #da190b;
+    }
+    .download-btn {
+        background-color: #007bff;
+        margin-left: 8px;
+    }
+    .download-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .skill-remove-btn {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        font-size: 11px;
+        line-height: 1;
+        cursor: pointer;
+        margin-left: 6px;
+        position: relative;
+        top: -1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .skill-remove-btn:hover {
+        background-color: #da190b;
+    }
+    .add-skill-input-group {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        align-items: center;
+    }
+    .add-skill-input-group input[type="text"] {
+        flex-grow: 1;
+        padding: 7px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .controls {
+        text-align: center;
+        margin-top: 25px;
+        margin-bottom: 15px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container" id="resume-content">
+    <div class="border-frame"></div>
+    <div class="border-inner-frame"></div>
+
+    <h1 id="user-name" contenteditable="true">YOUR FULL NAME</h1>
+
+    <p class="contact-info" contenteditable="true">
+      <span id="user-city">City, Country</span> |
+      <span id="user-phone">+00 000 0000000</span> |
+      <span id="user-email">your.email@example.com</span> |
+      <span id="user-linkedin">linkedin.com/in/yourprofile (optional)</span> |
+      <span id="user-portfolio">yourwebsite.com (optional)</span>
+    </p>
+
+    <div class="section" id="professional-summary-section">
+      <h2>PROFESSIONAL SUMMARY</h2>
+      <p contenteditable="true">Results-oriented professional with [X] years in [Industry], skilled in [Key Skill 1] and [Key Skill 2]. Drives [Outcome 1] and [Outcome 2].</p>
+    </div>
+
+    <div class="section" id="experience-section">
+      <h2>EXPERIENCE</h2>
+      <div id="experience-items-container">
+        <div class="experience-item">
+          <strong contenteditable="true">Job Title 1</strong> — <span contenteditable="true">Company Name 1</span>
+          <p class="location-date"><span contenteditable="true">City, Country</span> | <span contenteditable="true">Start Month Year</span> – <span contenteditable="true">End Month Year</span></p>
+          <ul contenteditable="true">
+            <li>Achieved [Result/Impact 1].</li>
+            <li>Managed [Responsibility/Task 1].</li>
+          </ul>
+          <button class="remove-btn" onclick="this.closest('.experience-item').remove()">Remove</button>
+        </div>
+        <div class="experience-item">
+          <strong contenteditable="true">Job Title 2</strong> — <span contenteditable="true">Company Name 2</span>
+          <p class="location-date"><span contenteditable="true">City, Country</span> | <span contenteditable="true">Start Month Year</span> – <span contenteditable="true">End Month Year</span></p>
+          <ul contenteditable="true">
+            <li>Spearheaded [Project/Initiative].</li>
+            <li>Implemented [Solution/Process].</li>
+          </ul>
+          <button class="remove-btn" onclick="this.closest('.experience-item').remove()">Remove</button>
+        </div>
+      </div>
+      <button class="add-btn" onclick="addExperienceItem()">Add Experience</button>
+    </div>
+
+    <div class="section" id="skills-section">
+        <h2>KEY SKILLS</h2>
+        <ul class="key-skills-grid" id="skills-list">
+            <li contenteditable="true">Skill A <button class="skill-remove-btn" onclick="this.closest('li').remove()">x</button></li>
+            <li contenteditable="true">Skill B <button class="skill-remove-btn" onclick="this.closest('li').remove()">x</button></li>
+            <li contenteditable="true">Skill C <button class="skill-remove-btn" onclick="this.closest('li').remove()">x</button></li>
+            <li contenteditable="true">Skill D <button class="skill-remove-btn" onclick="this.closest('li').remove()">x</button></li>
+            <li contenteditable="true">Skill E <button class="skill-remove-btn" onclick="this.closest('li').remove()">x</button></li>
+        </ul>
+        <div class="add-skill-input-group">
+            <input type="text" id="new-skill-input" placeholder="Enter new skill">
+            <button class="add-btn" onclick="addSkill()">Add Skill</button>
+        </div>
+    </div>
+
+    <div class="section" id="education-section">
+        <h2>EDUCATION</h2>
+        <div id="education-items-container">
+            <div class="education-item">
+                <strong contenteditable="true">Degree/Qualification</strong>, <span contenteditable="true">Major/Field</span>
+                <p class="location-date"><span contenteditable="true">University/Institute</span>, <span contenteditable="true">City, Country</span> | <span contenteditable="true">Graduation Year</span></p>
+                <ul contenteditable="true">
+                    <li>Relevant coursework or notable achievements.</li>
+                </ul>
+                <button class="remove-btn" onclick="this.closest('.education-item').remove()">Remove</button>
+            </div>
+        </div>
+        <button class="add-btn" onclick="addEducationItem()">Add Education</button>
+    </div>
+
+    </div>
+
+  <div class="controls">
+      <button class="download-btn" onclick="downloadPdf()">Download as PDF</button>
+      <button class="download-btn" onclick="downloadImage()">Download as Image (PNG)</button>
+  </div>
+
+  <script>
+    // JavaScript for Add/Remove functionality
+    function addExperienceItem() {
+      const container = document.getElementById('experience-items-container');
+      const newItemHTML = `
+        <div class="experience-item">
+          <strong contenteditable="true">New Job Title</strong> — <span contenteditable="true">New Company Name</span>
+          <p class="location-date"><span contenteditable="true">City, Country</span> | <span contenteditable="true">Start Month Year</span> – <span contenteditable="true">End Month Year</span></p>
+          <ul contenteditable="true">
+            <li>[Key responsibility/achievement 1]</li>
+          </ul>
+          <button class="remove-btn" onclick="this.closest('.experience-item').remove()">Remove</button>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', newItemHTML);
+    }
+
+    function addEducationItem() {
+      const container = document.getElementById('education-items-container');
+      const newItemHTML = `
+        <div class="education-item">
+            <strong contenteditable="true">New Degree/Qualification</strong>, <span contenteditable="true">Field of Study</span>
+            <p class="location-date"><span contenteditable="true">University/Institute</span>, <span contenteditable="true">City, Country</span> | <span contenteditable="true">Graduation Year</span></p>
+            <ul contenteditable="true">
+                <li>[Relevant coursework or achievements]</li>
+            </ul>
+            <button class="remove-btn" onclick="this.closest('.education-item').remove()">Remove</button>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', newItemHTML);
+    }
+
+    function addSkill() {
+        const skillInput = document.getElementById('new-skill-input');
+        const skillText = skillInput.value.trim();
+        if (skillText) {
+            const skillsList = document.getElementById('skills-list');
+            const newSkillHTML = `
+                <li contenteditable="true">${skillText} <button class="skill-remove-btn" onclick="this.closest('li').remove()">x</button></li>
+            `;
+            skillsList.insertAdjacentHTML('beforeend', newSkillHTML);
+            skillInput.value = '';
+        } else {
+            alert('Please enter a skill to add.');
+        }
+    }
+
+    // --- PDF and Image Download Functions ---
+
+    // Function to trigger download reliably
+    function triggerDownload(dataUrl, filename) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Function to download as PDF
+    async function downloadPdf() {
+        const element = document.getElementById('resume-content');
+        const buttonsToHide = document.querySelectorAll('.remove-btn, .add-btn, .skill-remove-btn, .add-skill-input-group, .controls');
+
+        // Hide buttons for clean PDF generation
+        buttonsToHide.forEach(btn => btn.style.display = 'none');
+
+        try {
+            // Use html2canvas to render the element to a canvas
+            const canvas = await html2canvas(element, {
+                scale: 3, // Higher scale for better resolution in PDF
+                useCORS: true,
+                logging: false,
+                allowTaint: true
+            });
+
+            // Get jsPDF from the window object
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4'); // Portrait, mm units, A4 size
+
+            // Calculate image dimensions to fit A4
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = pdf.internal.pageSize.getWidth(); // Use PDF page width
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            // This logic tries to fit content onto one page.
+            // If the rendered content is taller than an A4 page, it will scale down to fit.
+            if (imgHeight > pdf.internal.pageSize.getHeight()) {
+                const ratio = pdf.internal.pageSize.getHeight() / imgHeight;
+                const newImgWidth = imgWidth * ratio;
+                const newImgHeight = imgHeight * ratio;
+                // Center the scaled image
+                const xOffset = (pdf.internal.pageSize.getWidth() - newImgWidth) / 2;
+                const yOffset = (pdf.internal.pageSize.getHeight() - newImgHeight) / 2;
+                pdf.addImage(imgData, 'PNG', xOffset, yOffset, newImgWidth, newImgHeight);
+            } else {
+                // If content fits or is smaller, add it without scaling
+                const xOffset = (pdf.internal.pageSize.getWidth() - imgWidth) / 2; // Center horizontally
+                const yOffset = (pdf.internal.pageSize.getHeight() - imgHeight) / 2; // Center vertically
+                pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
+            }
+            
+            // Generate the PDF blob and trigger download
+            const pdfBlob = pdf.output('blob');
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            triggerDownload(pdfUrl, 'Your_Resume.pdf');
+            URL.revokeObjectURL(pdfUrl); // Clean up the object URL
+            
+        } catch (error) {
+            console.error("PDF generation failed:", error);
+            alert("PDF download failed. This might be due to browser security settings or complex page elements. Please try again, or use your browser's built-in Print to PDF option (Ctrl+P / Cmd+P).");
+        } finally {
+            // Restore buttons regardless of success or failure
+            buttonsToHide.forEach(btn => btn.style.display = '');
+        }
+    }
+
+    // Function to download as Image (PNG)
+    async function downloadImage() {
+        const element = document.getElementById('resume-content');
+        const buttonsToHide = document.querySelectorAll('.remove-btn, .add-btn, .skill-remove-btn, .add-skill-input-group, .controls');
+
+        // Hide buttons for clean image generation
+        buttonsToHide.forEach(btn => btn.style.display = 'none');
+
+        try {
+            const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false, allowTaint: true });
+            const imageUrl = canvas.toDataURL('image/png');
+            triggerDownload(imageUrl, 'Your_Resume.png');
+        } catch (error) {
+            console.error("Image generation failed:", error);
+            alert("Image download failed. Please try again.");
+        } finally {
+            // Restore buttons regardless of success or failure
+            buttonsToHide.forEach(btn => btn.style.display = '');
+        }
+    }
+
+  </script>
+</body>
+</html>

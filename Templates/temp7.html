@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1123">
+    <title>Professional One-Page CV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+    .cv-container {
+    min-width: 1123px;
+}
+    body {
+    overflow-x: auto;
+}
+        /* --- CSS for Professional One-Page CV (Optimized for A3 & PDF) --- */
+        :root {
+            /* Navy Blue Theme */
+            --primary-dark: #0a1f44; /* Deep Navy Blue */
+            --accent-color: #00BFFF; /* Deep Sky Blue / Azure */
+            --text-on-dark: #E0FFFF; /* Light Cyan for text on navy */
+            --text-body: #222222; /* Very dark grey for body text */
+            --text-secondary: #555555; /* Medium grey for secondary details */
+            --background-white: #f8f8f8; /* Changed to light grey */
+            --background-body: #f0f8ff; /* Very light blue for body background */
+            --border-light: #ddeeff; /* Light blue for subtle borders */
+            --angle-height: 25px; /* Visual height for the angled part */
+            --angle-skew-deg: 2deg; /* Angle for skew transform */
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 30px; /* Increased padding around the A3 container in browser (15mm * 2) */
+            background-color: var(--background-body);
+            display: flex;
+flex-wrap: wrap;
+            justify-content: center; /* Center the CV horizontally */
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            color: var(--text-body);
+            line-height: 1.4; /* Tighter line height */
+            font-size: 13px; /* Base font size, will adjust for elements */
+        }
+
+        .cv-container {
+            display: flex;
+            /* Exact A3 size at 96 DPI for screen view */
+            width: 1123px; /* 297mm * (96 DPI / 25.4 mm/inch) = 1122.5px, rounded to 1123 */
+            height: 1587px; /* 420mm * (96 DPI / 25.4 mm/inch) = 1587.4px, rounded to 1587 */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); /* Lighter shadow for professional feel */
+            background-color: var(--background-white);
+            overflow: hidden; /* Crucial for pseudo-elements extending and preventing content overflow */
+            border-radius: 0; /* No border-radius for strict A3 edge */
+            border: 1px solid var(--border-light); /* Thin A3 border/frame */
+            padding: 57px; /* 15mm margin on all sides (15mm * 96 DPI / 25.4 mm/inch = ~56.69px) */
+            box-sizing: border-box; /* Include padding in width/height */
+        }
+
+        /* Base section styling */
+        .section {
+            padding: 15px 18px; /* Further reduced padding */
+            margin-bottom: 12px; /* Further reduced margin between sections */
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left Column Styling */
+        .left-column {
+            width: 35%;
+            background-color: var(--primary-dark);
+            color: var(--text-on-dark);
+            padding: 18px 15px; /* Further reduced padding */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+        }
+
+        .left-column .section {
+            margin-bottom: 0;
+        }
+        .left-column .profile-section { margin-bottom: 10px; }
+        .left-column .about-us-section { margin-top: 10px; }
+        .left-column .contact-section { margin-top: 10px; }
+        .left-column .skills-section { margin-top: 10px; margin-bottom: 0; padding-bottom: 15px; }
+
+
+        .profile-section {
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-color);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: #0099cc;
+        }
+
+        .left-column h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--accent-color);
+            font-size: 1em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 5px;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        .about-us-section p {
+            font-size: 0.75em;
+            line-height: 1.5;
+            margin-bottom: 0;
+            color: var(--text-on-dark);
+        }
+
+        .contact-section .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            font-size: 0.75em;
+            color: var(--text-on-dark);
+            position: relative;
+        }
+
+        .contact-section .contact-item .icon {
+            width: 14px;
+            height: 14px;
+            margin-top: 2px;
+            margin-right: 8px;
+            filter: invert(1) hue-rotate(180deg) saturate(2);
+            flex-shrink: 0;
+        }
+
+        .skill-item {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .skill-item span {
+            display: block;
+            font-size: 0.7em;
+            margin-bottom: 3px;
+            font-weight: 500;
+            color: var(--text-on-dark);
+        }
+
+        .skill-bar {
+            background-color: rgba(255, 255, 255, 0.05);
+            height: 5px;
+            border-radius: 2.5px;
+            overflow: hidden;
+        }
+
+        .skill-level {
+            background-color: var(--accent-color);
+            height: 100%;
+            border-radius: 2.5px;
+            box-shadow: 0 0 4px rgba(0, 191, 255, 0.4);
+        }
+
+        /* Right Column Styling */
+        .right-column {
+            width: 65%;
+            background-color: var(--background-white);
+            padding: 18px 20px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .right-column .education-section {
+            margin-top: 25px; /* Standard section top margin */
+        }
+
+        .right-column .section {
+            margin-bottom: 25px;
+        }
+        .languages-section {
+            margin-bottom: 15px;
+        }
+
+        /* Header Section - Now with Skewed Pseudo-element for Angled Cut */
+        .header-section {
+            background-color: var(--primary-dark);
+            color: var(--text-on-dark);
+            padding: 25px 20px 40px 20px;
+            margin: -18px -20px 0px -20px; /* Extend to edges relative to its column */
+            min-height: 100px;
+            box-sizing: border-box;
+            position: relative; /* Essential for pseudo-element positioning */
+            overflow: hidden; /* Crucial to clip the pseudo-element if it extends outside */
+            z-index: 2; /* Ensure it stays on top */
+
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: calc(40px + var(--angle-height)); /* Increase padding to account for pseudo-element height */
+        }
+
+        .header-section::after { /* This pseudo-element creates the visual angled cut */
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--angle-height); /* Height of the skewed part */
+            background-color: var(--background-white); /* This 'cuts' the dark header */
+            transform-origin: bottom left; /* Pivot for skew */
+            transform: skewY(calc(-1 * var(--angle-skew-deg))); /* Negative skew to make bottom-right move up relative to bottom-left */
+            z-index: 1; /* Ensure it is visually on top of the header content */
+            pointer-events: none; /* Allows clicks/selection through it if needed */
+        }
+
+        .header-section .header-content {
+            width: 100%;
+            transform: translateY(-2px); /* Slight adjustment */
+            position: relative; /* Ensure content is above ::after */
+            z-index: 2; /* Bring content forward */
+        }
+
+        .header-section h1 {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            font-size: 2em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .header-section p {
+            font-family: 'Open Sans', sans-serif;
+            margin: 4px 0 0;
+            font-size: 0.9em;
+            opacity: 0.95;
+            font-weight: 400;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: var(--text-on-dark);
+        }
+
+        .right-column h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-dark);
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 6px;
+            letter-spacing: 0.7px;
+            font-weight: 600;
+        }
+
+        /* Timeline specific styling */
+        .timeline-item {
+            margin-bottom: 18px;
+            position: relative;
+            padding-left: 22px;
+        }
+
+        .timeline-item::before {
+            content: ''; /* Add content for pseudo-element */
+            position: absolute;
+            left: 0;
+            width: 7px;
+            height: 7px;
+            top: 3px;
+            border-radius: 50%; /* Circle shape */
+            background-color: var(--accent-color); /* Fill circle with accent color */
+            border: 1px solid var(--background-white);
+            box-shadow: 0 0 0 1px var(--accent-color);
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: ''; /* Add content for pseudo-element */
+            position: absolute;
+            left: 4px; /* Align with center of ::before */
+            top: 13px; /* Start below the ::before circle */
+            bottom: -8px; /* Extend downwards */
+            width: 1px;
+            background-color: var(--border-light); /* Line color */
+        }
+
+        .timeline-item h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0 0 2px 0;
+            font-size: 0.9em;
+            color: var(--text-body);
+            font-weight: 600;
+        }
+
+        .timeline-item h4 {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0 0 6px 0;
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .timeline-item p {
+            font-size: 0.75em;
+            line-height: 1.4;
+            color: var(--text-body);
+        }
+
+        .timeline-item ul {
+            list-style: none;
+            padding-left: 8px;
+            margin-top: 6px;
+        }
+
+        .timeline-item ul li {
+            margin-bottom: 2px;
+            font-size: 0.75em;
+            line-height: 1.3;
+            position: relative; /* For bullet point positioning */
+        }
+
+        .timeline-item ul li::before {
+            content: '•';
+            color: var(--accent-color);
+            position: absolute;
+            left: -8px;
+            top: 0;
+        }
+
+        /* Languages Section styling */
+        .languages-section {
+            padding-bottom: 15px;
+        }
+
+        .language-item {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .language-item span {
+            display: block;
+            font-size: 0.7em;
+            margin-bottom: 3px;
+            font-weight: 500;
+            color: var(--text-body);
+        }
+
+        .language-bar {
+            background-color: var(--border-light);
+            height: 5px;
+            border-radius: 2.5px;
+            overflow: hidden;
+        }
+
+        .language-level {
+            background-color: var(--accent-color);
+            height: 100%;
+            border-radius: 2.5px;
+            box-shadow: 0 0 4px rgba(0, 191, 255, 0.4);
+        }
+
+        /* CV Bottom Angled Closing Panel - Now with Skewed Pseudo-element for Angled Cut */
+        .cv-bottom-panel {
+            height: calc(35px + var(--angle-height)); /* Increase height to account for skew */
+            background-color: var(--primary-dark);
+            margin: 25px -20px -18px -20px; /* Extend to edges relative to its column */
+            position: relative;
+            overflow: hidden; /* Crucial to clip the pseudo-element */
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .cv-bottom-panel::before { /* This pseudo-element creates the visual angled cut */
+            content: '';
+            position: absolute;
+            top: 0; /* Position at the top of the panel */
+            left: 0;
+            width: 100%;
+            height: var(--angle-height); /* Height of the skewed part */
+            background-color: var(--background-white); /* This 'cuts' the dark panel */
+            transform-origin: top left; /* Pivot for skew */
+            transform: skewY(var(--angle-skew-deg)); /* Positive skew to make top-right move down relative to top-left */
+            z-index: 1; /* Ensure it is visually on top of the panel */
+            pointer-events: none; /* Allows clicks/selection through it */
+        }
+
+
+        /* --- Editable/Interactive Styles --- */
+        [contenteditable="true"] {
+            cursor: text;
+            outline: none;
+            transition: background-color 0.2s;
+            padding: 1px 3px;
+            margin: -1px -3px;
+        }
+
+        [contenteditable="true"]:hover {
+            background-color: rgba(0, 0, 0, 0.01);
+            border-radius: 1px;
+        }
+
+        [contenteditable="true"]:focus {
+            background-color: rgba(0, 0, 0, 0.03);
+            box-shadow: 0 0 0 1px var(--accent-color);
+            border-radius: 1px;
+        }
+
+        /* Specific styling for placeholder text */
+        [data-placeholder]:empty:before {
+            content: attr(data-placeholder);
+            color: var(--text-secondary);
+            opacity: 0.6;
+            display: inline-block;
+        }
+        [data-placeholder]:empty:focus:before {
+            content: "";
+        }
+
+        /* Buttons for Adding/Removing Sections/Items */
+        .add-btn {
+            background-color: var(--primary-dark);
+            color: var(--text-on-dark);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+            display: block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+
+        .left-column .add-btn {
+            background-color: var(--accent-color);
+            color: var(--primary-dark);
+        }
+        .left-column .add-btn:hover {
+            background-color: #0099cc;
+        }
+
+        .add-btn:hover {
+            background-color: #051022;
+            transform: translateY(-0.5px);
+        }
+
+        .add-btn:active {
+            transform: translateY(0);
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            cursor: pointer;
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            opacity: 0.5;
+            transition: color 0.2s, opacity 0.2s;
+        }
+        .remove-btn:hover {
+            color: var(--accent-color);
+            opacity: 1;
+        }
+
+        .left-column .remove-btn {
+            color: var(--text-on-dark);
+        }
+        .left-column .remove-btn:hover {
+            color: var(--accent-color);
+        }
+        
+        .add-list-item-btn {
+            background-color: var(--accent-color);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 0.8em;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 3px;
+            vertical-align: middle;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+            transition: background-color 0.2s;
+        }
+        .add-list-item-btn:hover {
+            background-color: #0099cc;
+        }
+
+
+        /* Download PDF Button */
+       .download-pdf-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background-color: var(--primary-dark);
+    color: var(--text-on-dark);
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1000;
+}
+
+        .download-pdf-btn:hover {
+            background-color: #051022;
+            transform: translateY(-1px);
+        }
+
+        /* --- Print Specific Adjustments (for PDF generation) --- */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .cv-container {
+                box-shadow: none;
+                margin: 0;
+                /* These are now implicitly handled by html2pdf.js and its jsPDF options */
+                /* width: 210mm; */
+                /* height: 297mm; */
+                overflow: hidden; /* Ensure angled cuts are honored */
+                border: none; /* No border in print */
+            }
+            .download-pdf-btn, .upload-btn, .add-btn, .remove-btn, .add-list-item-btn {
+                display: none !important;
+            }
+            /* Crucial: Ensure background colors and pseudo-elements are printed */
+            .left-column, .header-section, .skill-level, .language-level, .timeline-item::before,
+            .cv-bottom-panel,
+            .header-section::after, .cv-bottom-panel::before { /* Include pseudo-elements here */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+        @media screen and (max-width: 768px) {
+    body {
+        padding: 15px;
+        font-size: 12px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cv-container {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        padding: 20px;
+    }
+
+    .left-column, .right-column {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .header-section {
+        padding: 20px 15px 30px 15px;
+        margin: -15px -15px 0 -15px;
+    }
+
+    .cv-bottom-panel {
+        margin: 25px -15px -15px -15px;
+    }
+
+    .download-pdf-btn {
+        bottom: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="cv-container" id="cv-content">
+        <div class="left-column">
+            <div class="profile-section section">
+                <img src="https://via.placeholder.com/110/0a1f44/E0FFFF?text=Your+Photo" alt="Profile Picture" class="profile-pic" id="profilePic">
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('imageUpload').click()">&#x2191;</button>
+            </div>
+
+            <div class="about-us-section section">
+                <h2>ABOUT ME</h2>
+                <p contenteditable="true" data-placeholder="A brief, impactful statement about your professional self.">Highly motivated and results-oriented professional with a proven track record in [Your Field/Industry]. Passionate about [Your Passion] and dedicated to [Your Goal]. Seeking to leverage my skills and experience to contribute to [Company/Team/Project].</p>
+            </div>
+
+            <div class="contact-section section">
+                <h2>CONTACT</h2>
+                <div class="contact-item">
+                    <img src="https://api.iconify.design/ic:round-email.svg?color=%23e0ffff" alt="Email" class="icon">
+                    <span contenteditable="true" data-placeholder="your.email@example.com">your.email@example.com</span>
+                </div>
+                <div class="contact-item">
+                    <img src="https://api.iconify.design/ic:round-phone.svg?color=%23e0ffff" alt="Phone" class="icon">
+                    <span contenteditable="true" data-placeholder="+123 456 7890">+123 456 7890</span>
+                </div>
+                <div class="contact-item">
+                    <img src="https://api.iconify.design/ic:round-location-on.svg?color=%23e0ffff" alt="Location" class="icon">
+                    <span contenteditable="true" data-placeholder="City, Country">City, Country</span>
+                </div>
+                <div class="contact-item">
+                    <img src="https://api.iconify.design/mdi:linkedin?color=%23e0ffff" alt="LinkedIn" class="icon">
+                    <span contenteditable="true" data-placeholder="linkedin.com/in/yourprofile">linkedin.com/in/yourprofile</span>
+                </div>
+                <div class="contact-item">
+                    <img src="https://api.iconify.design/mdi:web?color=%23e0ffff" alt="Website" class="icon">
+                    <span contenteditable="true" data-placeholder="yourwebsite.com (Optional)">yourwebsite.com (Optional)</span>
+                </div>
+            </div>
+
+            <div class="skills-section section" id="skillsSection">
+                <h2>SKILLS</h2>
+                <div class="skill-item">
+                    <span contenteditable="true">Skill Name 1</span>
+                    <div class="skill-bar"><div class="skill-level" style="width: 90%;"></div></div>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <div class="skill-item">
+                    <span contenteditable="true">Skill Name 2</span>
+                    <div class="skill-bar"><div class="skill-level" style="width: 75%;"></div></div>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <button class="add-btn" onclick="addSkill()">Add Skill</button>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="header-section">
+                <div class="header-content">
+                    <h1 contenteditable="true" data-placeholder="YOUR FULL NAME">YOUR FULL NAME</h1>
+                    <p contenteditable="true" data-placeholder="Your Professional Title / Designation">Your Professional Title / Designation</p>
+                </div>
+            </div>
+
+            <div class="experience-section section" id="experienceSection">
+                <h2>EXPERIENCE</h2>
+                <div class="timeline-item">
+                    <h3 contenteditable="true">Job Title</h3>
+                    <h4 contenteditable="true">Company Name | City, Country | Month Year – Month Year</h4>
+                    <p contenteditable="true" data-placeholder="Brief description of your responsibilities and achievements.">Responsible for [Key Responsibility]. Successfully [Achieved Result 1] resulting in [Quantifiable Impact]. Led [Project/Initiative] from conception to completion.</p>
+                    <ul contenteditable="true" data-placeholder="List key responsibilities/achievements.">
+                        <li>Managed a team of 5 developers, increasing project delivery efficiency by 20%.</li>
+                        <li>Developed and implemented new software features, improving user engagement by 15%.</li>
+                        <li>Optimized database queries, reducing load times by 30%.<button class="add-list-item-btn" onclick="addListItem(this)">+</button></li>
+                    </ul>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <div class="timeline-item">
+                    <h3 contenteditable="true">Previous Job Title</h3>
+                    <h4 contenteditable="true">Previous Company | City, Country | Month Year – Month Year</h4>
+                    <p contenteditable="true" data-placeholder="Brief description of your responsibilities and achievements.">Contributed to [Project/Team] by [Key Contribution]. Assisted in [Task/Duty] and learned [New Skill].</p>
+                    <ul contenteditable="true" data-placeholder="List key responsibilities/achievements.">
+                        <li>Assisted in data analysis and report generation for various projects.<button class="add-list-item-btn" onclick="addListItem(this)">+</button></li>
+                    </ul>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <button class="add-btn" onclick="addExperience()">Add Experience</button>
+            </div>
+
+            <div class="education-section section" id="educationSection">
+                <h2>EDUCATION</h2>
+                <div class="timeline-item">
+                    <h3 contenteditable="true">Degree Name</h3>
+                    <h4 contenteditable="true">University Name | City, Country | Year of Graduation</h4>
+                    <p contenteditable="true" data-placeholder="Optional: GPA, relevant coursework, or thesis topic.">Relevant Coursework: [Course 1], [Course 2]</p>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <div class="timeline-item">
+                    <h3 contenteditable="true">High School Diploma</h3>
+                    <h4 contenteditable="true">School Name | City, Country | Year of Graduation</h4>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <button class="add-btn" onclick="addEducation()">Add Education</button>
+            </div>
+
+            <div class="languages-section section" id="languagesSection">
+                <h2>LANGUAGES</h2>
+                <div class="language-item">
+                    <span contenteditable="true">Language 1</span>
+                    <div class="language-bar"><div class="language-level" style="width: 100%;"></div></div>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <div class="language-item">
+                    <span contenteditable="true">Language 2</span>
+                    <div class="language-bar"><div class="language-level" style="width: 80%;"></div></div>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+                <button class="add-btn" onclick="addLanguage()">Add Language</button>
+            </div>
+
+            <div class="cv-bottom-panel"></div>
+        </div>
+    </div>
+
+    <button class="download-pdf-btn" onclick="generatePdf()">Download PDF</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const profilePic = document.getElementById('profilePic');
+            const imageUpload = document.getElementById('imageUpload');
+
+            imageUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profilePic.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Make existing timeline ul's and p's contenteditable
+            document.querySelectorAll('.timeline-item ul, .timeline-item p').forEach(el => {
+                el.setAttribute('contenteditable', 'true');
+                if (el.tagName === 'UL') {
+                    el.setAttribute('data-placeholder', 'List key responsibilities/achievements.');
+                } else if (el.tagName === 'P') {
+                    el.setAttribute('data-placeholder', 'Brief description of your responsibilities and achievements.');
+                }
+            });
+        });
+
+
+        // Function to add a new skill
+        function addSkill() {
+            const skillsSection = document.getElementById('skillsSection');
+            const newSkillHtml = `
+                <div class="skill-item">
+                    <span contenteditable="true">New Skill</span>
+                    <div class="skill-bar"><div class="skill-level" style="width: 70%;"></div></div>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+            `;
+            // Insert before the add button
+            skillsSection.querySelector('.add-btn').insertAdjacentHTML('beforebegin', newSkillHtml);
+        }
+
+        // Function to add a new experience
+        function addExperience() {
+            const experienceSection = document.getElementById('experienceSection');
+            const newExperienceHtml = `
+                <div class="timeline-item">
+                    <h3 contenteditable="true" data-placeholder="Job Title">Job Title</h3>
+                    <h4 contenteditable="true" data-placeholder="Company Name | City, Country | Month Year – Month Year">Company Name | City, Country | Month Year – Month Year</h4>
+                    <p contenteditable="true" data-placeholder="Brief description of your responsibilities and achievements.">Brief description of your responsibilities and achievements.</p>
+                    <ul contenteditable="true" data-placeholder="List key responsibilities/achievements.">
+                        <li>First key responsibility or achievement.<button class="add-list-item-btn" onclick="addListItem(this)">+</button></li>
+                    </ul>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+            `;
+            experienceSection.querySelector('.add-btn').insertAdjacentHTML('beforebegin', newExperienceHtml);
+        }
+
+        // Function to add a new education entry
+        function addEducation() {
+            const educationSection = document.getElementById('educationSection');
+            const newEducationHtml = `
+                <div class="timeline-item">
+                    <h3 contenteditable="true" data-placeholder="Degree Name">Degree Name</h3>
+                    <h4 contenteditable="true" data-placeholder="University Name | City, Country | Year of Graduation">University Name | City, Country | Year of Graduation</h4>
+                    <p contenteditable="true" data-placeholder="Optional: GPA, relevant coursework, or thesis topic.">Optional: GPA, relevant coursework, or thesis topic.</p>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+            `;
+            educationSection.querySelector('.add-btn').insertAdjacentHTML('beforebegin', newEducationHtml);
+        }
+
+        // Function to add a new language
+        function addLanguage() {
+            const languagesSection = document.getElementById('languagesSection');
+            const newLanguageHtml = `
+                <div class="language-item">
+                    <span contenteditable="true">New Language</span>
+                    <div class="language-bar"><div class="language-level" style="width: 60%;"></div></div>
+                    <button class="remove-btn" onclick="this.parentNode.remove()">&#x2715;</button>
+                </div>
+            `;
+            languagesSection.querySelector('.add-btn').insertAdjacentHTML('beforebegin', newLanguageHtml);
+        }
+
+        // Function to add a new list item within a UL
+        function addListItem(buttonElement) {
+            const ulElement = buttonElement.closest('ul');
+            if (ulElement) {
+                const newListItem = document.createElement('li');
+                newListItem.setAttribute('contenteditable', 'true');
+                newListItem.textContent = 'New list item.';
+                newListItem.innerHTML += '<button class="add-list-item-btn" onclick="addListItem(this)">+</button>'; // Add new button to new item
+                ulElement.appendChild(newListItem);
+            }
+        }
+
+        // PDF Generation
+        function generatePdf() {
+            const element = document.getElementById('cv-content');
+            
+            // Calculate the content height
+            const contentHeight = element.scrollHeight; // Includes padding
+            
+            // Determine target format and its height in mm
+            // For A4: 297mm, For A3: 420mm
+            const targetFormat = 'a3'; // Could be 'a4' or 'a3' based on user preference or content
+            let targetHeightMm;
+            if (targetFormat === 'a4') {
+                targetHeightMm = 297;
+            } else { // 'a3'
+                targetHeightMm = 420;
+            }
+
+            // Margin in mm
+            const marginMm = 15; 
+            const usableHeightMm = targetHeightMm - (2 * marginMm);
+
+            // Calculate scale based on content height relative to usable PDF height (in pixels)
+            // Need to convert usableHeightMm to pixels at the chosen DPI (default 96 DPI for web, but html2canvas will render at higher DPI)
+            // A safer approach is to let html2pdf manage the scaling, but provide a max height constraint.
+            // For "fit on one page", html2pdf.js has `fit: true` option with `pagebreak` configuration.
+            // However, the `fit` option usually scales to the whole page, including margins.
+            // To ensure content fits within *usable* area, we might need a custom scale, or adjust pdf.internal.scaleFactor if `html2pdf` doesn't handle it perfectly.
+
+            // A more robust way to ensure content fits without manual scaling and respecting margins
+            // is to let html2pdf.js handle it by setting the `pagebreak` option.
+            const opt = {
+                margin: marginMm, // Apply 15mm margin on all sides
+                filename: `your-resume-${targetFormat}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, // Higher scale for better quality
+                    logging: true, 
+                    useCORS: true // Important for images like profile pic
+                }, 
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: targetFormat, 
+                    orientation: 'portrait' 
+                },
+                // Crucial for fitting content onto a single page without cutting sections
+                pagebreak: { 
+                    mode: ['avoid-all', 'css', 'legacy'], // Prioritize avoiding breaks, then use css, then legacy
+                    before: [], // No specific page breaks before elements
+                    after: [], // No specific page breaks after elements
+                    avoid: ['h2', '.section'] // Avoid breaking these elements across pages
+                }
+            };
+            
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
