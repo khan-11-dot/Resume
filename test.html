@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Korean Language Proficiency Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Basic Reset and Font */
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #eee;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0 0 10px;
+    }
+
+    .header p {
+      color: #7f8c8d;
+    }
+
+    .highlighted-name {
+      color: #3498db;
+      font-weight: bold;
+    }
+
+    /* Info and Cards */
+    .card {
+      background-color: #f8f9fa;
+      border: 1px solid #e0e1e2;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    #test-info {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+
+    .info-item strong {
+      display: block;
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .info-item span {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #3498db;
+    }
+
+    /* Questions */
+    .question-group {
+      margin-bottom: 30px;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .question-group:last-of-type {
+      border-bottom: none;
+    }
+
+    .question-group h3 {
+      font-size: 1.2em;
+      color: #2980b9;
+      margin-top: 0;
+    }
+
+    .question {
+      margin-bottom: 15px;
+    }
+
+    .question p {
+      font-size: 1em;
+      margin: 0 0 10px;
+      font-weight: bold;
+    }
+
+    .options-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .options-list li {
+      margin-bottom: 8px;
+    }
+
+    .options-list label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .options-list label:hover {
+      background-color: #f1f3f5;
+      border-color: #adb5bd;
+    }
+
+    .options-list input[type="radio"] {
+      margin-right: 10px;
+      accent-color: #3498db;
+    }
+
+    /* Buttons */
+    .controls {
+      text-align: center;
+    }
+
+    #submit-btn, #review-btn {
+      padding: 12px 30px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #submit-btn:hover, #review-btn:hover {
+      background-color: #2980b9;
+    }
+
+    /* Results */
+    #results-section {
+      text-align: center;
+      padding: 30px;
+    }
+
+    #results-container {
+      background-color: #e8f5e9;
+      border: 2px solid #4caf50;
+      border-radius: 12px;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    #result-title {
+      font-size: 2.2em;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    #score-badge {
+      display: inline-block;
+      background-color: #4caf50;
+      color: white;
+      font-size: 1.8em;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+    }
+
+    #result-summary {
+      font-size: 1.4em;
+      margin-bottom: 15px;
+    }
+
+    .grade {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #e67e22;
+    }
+    
+    .hidden {
+      display: none;
+    }
+
+    .correct {
+      background-color: #e0ffe0 !important;
+      border-color: #4caf50 !important;
+    }
+
+    .incorrect {
+      background-color: #ffe0e0 !important;
+      border-color: #f44336 !important;
+    }
+
+    .review-answers-btn-container {
+      margin-top: 20px;
+    }
+
+    /* Certificate Styling */
+    #certificate-section {
+      text-align: center;
+      margin-top: 30px;
+      border: 2px solid #3498db;
+      border-radius: 15px;
+      padding: 40px;
+      background-color: #eaf6ff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    #certificate-title {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #2980b9;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    
+    #certificate-subtitle {
+      font-size: 1.5em;
+      color: #34495e;
+      margin-bottom: 10px;
+    }
+
+    #certificate-user-name {
+      font-size: 2em;
+      font-family: 'Times New Roman', serif;
+      font-weight: bold;
+      color: #e74c3c;
+      margin: 20px 0;
+      text-decoration: underline;
+    }
+
+    #certificate-score {
+      font-size: 1.2em;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    #certificate-date {
+      font-size: 0.9em;
+      color: #7f8c8d;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        margin: 15px;
+        padding: 15px;
+      }
+      .header h1 {
+        font-size: 1.5em;
+      }
+      #test-info {
+        flex-direction: column;
+        align-items: center;
+      }
+      .info-item {
+        margin-bottom: 10px;
+      }
+      #results-container {
+        padding: 20px;
+      }
+      #result-title {
+        font-size: 1.8em;
+      }
+      #score-badge {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="main-container" class="container">
+    <header class="header">
+      <h1 id="main-title">Korean Language Proficiency Test</h1>
+      <p>This test evaluates your foundational knowledge of the Korean language. All questions are based on reading comprehension, vocabulary, and basic grammar.</p>
+      <p>Test prepared by: <span class="highlighted-name">Bilal Ahmad</span></p>
+    </header>
+
+    <div id="test-info" class="card">
+      <div class="info-item">
+        <strong>Total Questions:</strong> <span id="total-questions">40</span>
+      </div>
+      <div class="info-item">
+        <strong>Time Remaining:</strong> <span id="timer">20:00</span>
+      </div>
+      <div class="info-item">
+        <strong>Category:</strong> Beginner Level
+      </div>
+    </div>
+
+    <form id="quiz-form">
+      </form>
+
+    <div class="controls">
+      <button type="button" id="submit-btn">Submit Test</button>
+    </div>
+
+    <div id="results-section" class="hidden">
+      <div id="results-container">
+        <h2 id="result-title">Test Results</h2>
+        <div id="score-badge"></div>
+        <div id="result-summary"></div>
+        <div class="review-answers-btn-container">
+          <button type="button" id="review-btn">Review Answers</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="certificate-section" class="hidden">
+      <div id="certificate-container">
+        <h2 id="certificate-title">Certificate of Completion</h2>
+        <p id="certificate-subtitle">This certifies that</p>
+        <p id="certificate-user-name">A Valuable Participant</p>
+        <p>has successfully completed the Korean Language Proficiency Test.</p>
+        <p id="certificate-score"></p>
+        <p id="certificate-date"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const readingVocabularyQuestions = [
+      { id: 1, question: "한복은 주로 언제 입는 옷입니까? (Hanbok is worn on which occasion?)", options: ["매일 (Every day)", "특별한 날 (Special days)", "운동할 때 (When exercising)", "비 올 때 (When it rains)"], answer: 1 },
+      { id: 2, question: "한국의 수도는 어디입니까? (What is the capital of Korea?)", options: ["부산 (Busan)", "서울 (Seoul)", "대구 (Daegu)", "인천 (Incheon)"], answer: 1 },
+      { id: 3, question: "학교에 가기 위해 주로 이용하는 것은 무엇입니까? (What is mainly used to go to school?)", options: ["자동차 (Car)", "비행기 (Airplane)", "배 (Ship)", "자전거 (Bicycle)"], answer: 0 },
+      { id: 4, question: "김치는 어떤 맛이 나는 음식입니까? (What flavor does Kimchi have?)", options: ["단 맛 (Sweet taste)", "매운 맛 (Spicy taste)", "짠 맛 (Salty taste)", "신 맛 (Sour taste)"], answer: 1 },
+      { id: 5, question: "명절에 가족이나 친척들을 만나서 하는 일은 무엇입니까? (What do you do with family on a holiday?)", options: ["공부해요 (Study)", "여행해요 (Travel)", "친척을 만나요 (Meet relatives)", "운동해요 (Exercise)"], answer: 2 },
+      { id: 6, question: "봄의 날씨는 어떻습니까? (What is the weather like in spring?)", options: ["덥다 (Hot)", "춥다 (Cold)", "시원하다 (Cool)", "따뜻하다 (Warm)"], answer: 3 },
+      { id: 7, question: "한국의 전통 의상은 무엇입니까? (What is the traditional clothing of Korea?)", options: ["기모노 (Kimono)", "치파오 (Cheongsam)", "한복 (Hanbok)", "사리 (Sari)"], answer: 2 },
+      { id: 8, question: "한국에서 사용하는 돈은 무엇입니까? (What currency is used in Korea?)", options: ["엔 (Yen)", "달러 (Dollar)", "원 (Won)", "유로 (Euro)"], answer: 2 },
+      { id: 9, question: "한국 음식 중 매운 음식은 무엇입니까? (Which is a spicy Korean food?)", options: ["불고기 (Bulgogi)", "비빔밥 (Bibimbap)", "김밥 (Kimbap)", "떡볶이 (Tteokbokki)"], answer: 3 },
+      { id: 10, question: "한국에서 가장 높은 산은 무엇입니까? (What is the tallest mountain in Korea?)", options: ["한라산 (Hallasan)", "지리산 (Jirisan)", "설악산 (Seoraksan)", "북한산 (Bukhansan)"], answer: 0 },
+      { id: 11, question: "비가 올 때 사용하는 물건은? (What do you use when it rains?)", options: ["우산 (Umbrella)", "모자 (Hat)", "장갑 (Gloves)", "안경 (Glasses)"], answer: 0 },
+      { id: 12, question: "가을에 주로 하는 활동은? (What is a common activity in autumn?)", options: ["수영해요 (Swimming)", "눈싸움해요 (Snow fight)", "독서해요 (Reading)", "딸기 따요 (Picking strawberries)"], answer: 2 },
+      { id: 13, question: "한국의 전통 악기는? (What is a traditional Korean instrument?)", options: ["기타 (Guitar)", "드럼 (Drum)", "가야금 (Gayageum)", "피아노 (Piano)"], answer: 2 },
+      { id: 14, question: "한국의 전통 집은? (What is a traditional Korean house?)", options: ["아파트 (Apartment)", "빌라 (Villa)", "한옥 (Hanok)", "펜션 (Pension)"], answer: 2 },
+      { id: 15, question: "한국의 대표적인 겨울 음식은? (What is a typical Korean winter food?)", options: ["빙수 (Bingsu)", "삼계탕 (Samgyetang)", "김치찌개 (Kimchi stew)", "냉면 (Naengmyeon)"], answer: 2 },
+      { id: 16, question: "한국에서 가장 큰 도시는? (What is the largest city in Korea?)", options: ["서울 (Seoul)", "부산 (Busan)", "인천 (Incheon)", "대구 (Daegu)"], answer: 0 },
+      { id: 17, question: "한국의 국화는? (What is the national flower of Korea?)", options: ["장미 (Rose)", "무궁화 (Mugunghwa)", "진달래 (Azalea)", "개나리 (Forsythia)"], answer: 1 },
+      { id: 18, question: "새해에 먹는 전통 음식은? (What is a traditional food eaten on New Year's Day?)", options: ["미역국 (Seaweed soup)", "떡국 (Tteokguk)", "잡채 (Japchae)", "불고기 (Bulgogi)"], answer: 1 },
+      { id: 19, question: "한국의 대표적인 섬은? (What is a representative island of Korea?)", options: ["울릉도 (Ulleungdo)", "백령도 (Baengnyeongdo)", "제주도 (Jeju-do)", "독도 (Dokdo)"], answer: 2 },
+      { id: 20, question: "김밥의 주 재료는? (What is the main ingredient of kimbap?)", options: ["소고기 (Beef)", "돼지고기 (Pork)", "김 (Seaweed)", "밥 (Rice)"], answer: 3 },
+    ];
+
+    const grammarQuestions = [
+      { id: 21, question: "가방____ 있어요. (Bag ____ is there.)", options: ["이", "가", "은", "는"], answer: 0 },
+      { id: 22, question: "오늘 ____ 날씨가 좋아요. (Today ____ weather is good.)", options: ["은", "는", "이", "가"], answer: 1 },
+      { id: 23, question: "무엇을 ____? (What ____?)", options: ["먹습니다", "먹어요", "먹어요?", "먹습니까?"], answer: 2 },
+      { id: 24, question: "저는 한국어를 ____. (I Korean ____.)", options: ["공부해요", "공부하다", "공부한", "공부하고"], answer: 0 },
+      { id: 25, question: "친구가 ____. (My friend ____.)", options: ["왔습니다", "옵니다", "오고", "왔다"], answer: 0 },
+      { id: 26, question: "학교에 ____. (Go to school.)", options: ["가요", "가", "가는", "가고"], answer: 0 },
+      { id: 27, question: "이것은 제 ____. (This is my ____.)", options: ["책이다", "책이", "책입니다", "책이에요"], answer: 2 },
+      { id: 28, question: "사과 ____ 먹어요. (I eat an apple.)", options: ["을", "를", "은", "는"], answer: 1 },
+      { id: 29, question: "어제 영화를 ____. (I watched a movie yesterday.)", options: ["봅니다", "봤어요", "봐요", "볼 거예요"], answer: 1 },
+      { id: 30, question: "나는 밥을 ____. (I eat rice.)", options: ["먹어", "먹어요", "먹고", "먹은"], answer: 1 },
+      { id: 31, question: "저는 학생 ____. (I am a student.)", options: ["입니다", "이에요", "입니까", "입니까?"], answer: 0 },
+      { id: 32, question: "날씨가 ____. (The weather is cold.)", options: ["춥다", "춥습니다", "추운", "춥고"], answer: 1 },
+      { id: 33, question: "나는 ____ 한국에 가요. (I go to Korea.)", options: ["에", "에서", "은", "는"], answer: 0 },
+      { id: 34, question: "이 책은 ____. (This book is expensive.)", options: ["비싸다", "비쌉니다", "비싼", "비싸고"], answer: 1 },
+      { id: 35, question: "____ 친구를 만나요? (When do you meet a friend?)", options: ["어디", "언제", "누구", "무엇"], answer: 1 },
+      { id: 36, question: "저는 주말에 ____. (I rest on the weekend.)", options: ["쉬어요", "쉬다", "쉬는", "쉬고"], answer: 0 },
+      { id: 37, question: "이것은 ____입니까? (Is this a pen?)", options: ["펜", "펜이", "펜은", "펜입니까?"], answer: 3 },
+      { id: 38, question: "저는 커피를 ____. (I like coffee.)", options: ["좋아합니다", "좋아하다", "좋아하는", "좋아하고"], answer: 0 },
+      { id: 39, question: "무슨 음식을 ____? (What food do you eat?)", options: ["먹어요", "먹을까요", "먹는", "먹고"], answer: 0 },
+      { id: 40, question: "친구가 ____. (My friend is coming.)", options: ["옵니다", "왔습니다", "올 거예요", "온다"], answer: 0 },
+    ];
+
+    const allQuestions = [...readingVocabularyQuestions, ...grammarQuestions];
+    let userAnswers = new Array(allQuestions.length).fill(null);
+    let timerInterval;
+
+    const quizForm = document.getElementById('quiz-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const resultsSection = document.getElementById('results-section');
+    const resultSummary = document.getElementById('result-summary');
+    const scoreBadge = document.getElementById('score-badge');
+    const timerSpan = document.getElementById('timer');
+    const mainTitle = document.getElementById('main-title');
+    const certificateSection = document.getElementById('certificate-section');
+    const certificateScore = document.getElementById('certificate-score');
+    const certificateDate = document.getElementById('certificate-date');
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function renderQuestions() {
+      quizForm.innerHTML = '';
+      shuffle(readingVocabularyQuestions);
+      shuffle(grammarQuestions);
+      
+      const readingSection = document.createElement('div');
+      readingSection.className = 'question-group';
+      readingSection.innerHTML = '<h3>독해 및 어휘 문제 (Reading & Vocabulary)</h3>';
+      readingVocabularyQuestions.forEach((q, i) => {
+        readingSection.innerHTML += createQuestionHTML(q, i);
+      });
+      quizForm.appendChild(readingSection);
+
+      const grammarSection = document.createElement('div');
+      grammarSection.className = 'question-group';
+      grammarSection.innerHTML = '<h3>문법 문제 (Grammar)</h3>';
+      grammarQuestions.forEach((q, i) => {
+        grammarSection.innerHTML += createQuestionHTML(q, i + readingVocabularyQuestions.length);
+      });
+      quizForm.appendChild(grammarSection);
+    }
+
+    function createQuestionHTML(q, index) {
+      const questionNumber = index + 1;
+      const optionsHTML = q.options.map((opt, idx) => `
+        <li>
+          <label>
+            <input type="radio" name="q${index}" value="${idx}"> ${opt}
+          </label>
+        </li>
+      `).join('');
+
+      return `
+        <div class="question" id="question-${index}">
+          <p><strong>Q${questionNumber}.</strong> ${q.question}</p>
+          <ul class="options-list">
+            ${optionsHTML}
+          </ul>
+        </div>
+      `;
+    }
+
+    function startTimer(duration) {
+      let time = duration * 60;
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        timerSpan.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (time <= 0) {
+          clearInterval(timerInterval);
+          submitTest();
+        }
+        time--;
+      }, 1000);
+    }
+
+    function submitTest() {
+      clearInterval(timerInterval);
+      let correctAnswersCount = 0;
+      
+      allQuestions.forEach((q, i) => {
+        const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selectedOption) {
+          userAnswers[i] = parseInt(selectedOption.value);
+          if (userAnswers[i] === q.answer) {
+            correctAnswersCount++;
+          }
+        }
+      });
+      
+      const totalScore = correctAnswersCount * 5;
+      displayResults(totalScore, correctAnswersCount);
+    }
+
+    function displayResults(totalScore, correctAnswersCount) {
+      const percentage = (totalScore / 200) * 100;
+      let grade = '';
+      if (percentage >= 90) grade = 'A+';
+      else if (percentage >= 80) grade = 'A';
+      else if (percentage >= 70) grade = 'B';
+      else if (percentage >= 60) grade = 'C';
+      else grade = 'F';
+
+      resultsSection.classList.remove('hidden');
+      scoreBadge.textContent = `${totalScore}/200`;
+      
+      let passStatus = (totalScore >= 110) ? 'Pass' : 'Fail';
+      let message = (totalScore >= 110) ? 'Congratulations!' : 'Better luck next time.';
+
+      resultSummary.innerHTML = `
+        <h3 style="color: #2c3e50; font-size: 1.8em; margin-bottom: 10px;">${message}</h3>
+        <p style="font-size: 1.2em;">You have successfully completed the Korean Language Proficiency Test.</p>
+        <p style="font-size: 1.2em;">Your Final Score: ${totalScore} out of 200 (${percentage.toFixed(2)}%)<br>Your Grade: <span class="grade">${grade}</span></p>
+        <p style="font-size: 1.2em;">Result: <strong>${passStatus}</strong></p>
+        <p style="font-size: 0.9em; color: #7f8c8d;">Test prepared by: <span class="highlighted-name">Bilal Ahmad</span></p>
+      `;
+      
+      submitBtn.style.display = 'none';
+      document.getElementById('review-btn').style.display = 'inline-block';
+
+      if (totalScore >= 110) {
+        displayCertificate(totalScore);
+      }
+    }
+
+    function displayCertificate(score) {
+      const today = new Date();
+      const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      certificateScore.textContent = `Scored: ${score} out of 200`;
+      certificateDate.textContent = `Date: ${date}`;
+      certificateSection.classList.remove('hidden');
+    }
+
+    function reviewAnswers() {
+      resultsSection.classList.add('hidden');
+      quizForm.style.display = 'block';
+
+      allQuestions.forEach((q, i) => {
+        const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+        
+        const options = document.querySelectorAll(`input[name="q${i}"]`);
+        options.forEach(opt => {
+          opt.disabled = true;
+          const parentLabel = opt.parentElement;
+          if (parseInt(opt.value) === q.answer) {
+            parentLabel.classList.add('correct');
+          }
+          if (selectedOption && parseInt(selectedOption.value) !== q.answer && parseInt(opt.value) === parseInt(selectedOption.value)) {
+            parentLabel.classList.add('incorrect');
+          }
+        });
+      });
+      document.getElementById('review-btn').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Test starts automatically on page load
+    renderQuestions();
+    startTimer(20);
+
+    submitBtn.addEventListener('click', () => {
+      quizForm.style.display = 'none';
+      submitTest();
+    });
+    
+    document.getElementById('review-btn').addEventListener('click', reviewAnswers);
+  </script>
+</body>
+</html>
