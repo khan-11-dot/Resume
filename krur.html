@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>کوریَن زبان کا امتحان</title>
+  <style>
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .question {
+      background: #fff;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    .options label {
+      display: block;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-top: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .options input[type="radio"] {
+      display: none;
+    }
+    .options input[type="radio"]:checked + label {
+      background-color: #d1e7dd;
+      border-color: #0f5132;
+    }
+    button {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 25px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 22px;
+    }
+    .pass {
+      color: green;
+      font-weight: bold;
+    }
+    .fail {
+      color: red;
+      font-weight: bold;
+    }
+    .grade {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    .fixed-center-message {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      font-size: 24px;
+      display: none;
+    }
+    .timer {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    @media(max-width: 600px) {
+      .question {
+        font-size: 15px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 کوریَن زبان کا امتحان</h1>
+     <h1> By 
+     BILAL AHMAD</h1>
+    <div class="timer" id="timer">⏳ وقت باقی: 20:00</div>
+    <form id="quizForm">
+      <div id="questions"></div>
+      <button type="submit">جمع کریں</button>
+    </form>
+    <div class="result" id="result"></div>
+    <div class="fixed-center-message" id="finalMessage"></div>
+    <div style="text-align:center; margin-top: 20px;">
+      <button onclick="location.reload()">🔁 دوبارہ آزمائیں</button>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      // Easy Questions (1-10)
+      { question: "'안녕하세요' کا کیا مطلب ہے؟", options: ["ہیلو", "الوداع", "شکریہ", "معذرت"], correct: 0 },
+      { question: "'사랑해요' کا مطلب کیا ہے؟", options: ["مجھے تم سے نفرت ہے", "مجھے کھانا پسند ہے", "میں تم سے محبت کرتا ہوں", "پھر ملتے ہیں"], correct: 2 },
+      { question: "'학교' کسے کہتے ہیں؟", options: ["ہسپتال", "اسکول", "مارکیٹ", "پارک"], correct: 1 },
+      { question: "'물' کا کیا مطلب ہے؟", options: ["پانی", "آگ", "ہوا", "زمین"], correct: 0 },
+      { question: "'빵' کیا ہے؟", options: ["روٹی", "دودھ", "سبزی", "چاول"], correct: 0 },
+      { question: "'친구' کا مطلب کیا ہے؟", options: ["ماں", "دوست", "استاد", "لڑکا"], correct: 1 },
+      { question: "'날씨' کا مطلب کیا ہے؟", options: ["موسم", "گھڑی", "رات", "چاند"], correct: 0 },
+      { question: "'의자' کا مطلب کیا ہے؟", options: ["میز", "کرسی", "کھڑکی", "پنکھا"], correct: 1 },
+      { question: "'책' کس چیز کو کہتے ہیں؟", options: ["کرسی", "بیگ", "کتاب", "قلم"], correct: 2 },
+      { question: "'사과' کا مطلب کیا ہے؟", options: ["سیب", "کیلا", "انگور", "آم"], correct: 0 },
+
+      // Grammar Questions (11-20)
+      { question: "'-고 있다' کا مطلب کیا ہے؟", options: ["ماضی", "حال جاری", "مستقبل", "منفی"], correct: 1 },
+      { question: "'-았/었어요' کس زمانہ کو ظاہر کرتا ہے؟", options: ["حال", "ماضی", "مستقبل", "امریہ"], correct: 1 },
+      { question: "'-고 싶다' کا مطلب کیا ہے؟", options: ["مشورہ", "منصوبہ", "خواہش", "حکم"], correct: 2 },
+      { question: "'지만' کا مطلب کیا ہے؟", options: ["موازنہ", "مخالفت", "وقت", "جگہ"], correct: 1 },
+      { question: "'-기 때문에' کا مطلب کیا ہے؟", options: ["کیونکہ", "اگرچہ", "اگر", "پھر"], correct: 0 },
+      { question: "'-으세요' کا استعمال کس کے لیے ہوتا ہے؟", options: ["درخواست", "بیان", "منع", "شرط"], correct: 0 },
+      { question: "'-지 마세요' کا مطلب کیا ہے؟", options: ["براہ مہربانی نہ کریں", "براہ مہربانی کریں", "ضرور کریں", "لازمی کریں"], correct: 0 },
+      { question: "'-ㄹ까요?' کب استعمال ہوتا ہے؟", options: ["تجویز", "حکم", "معذرت", "ماضی"], correct: 0 },
+      { question: "'에서' کس چیز کو ظاہر کرتا ہے؟", options: ["مقام", "سمت", "وقت", "فعل"], correct: 0 },
+      { question: "'-(으)ㄹ 거예요' کا مطلب کیا ہے؟", options: ["ماضی", "حال", "مستقبل", "منفی"], correct: 2 },
+
+      // Hard Questions (21-40)
+      { question: "'공부하고 있어요' کا مطلب کیا ہے؟", options: ["میں کھیل رہا ہوں", "میں پڑھ رہا ہوں", "میں سو رہا ہوں", "میں کھا رہا ہوں"], correct: 1 },
+      { question: "'밥을 먹은 후에 이를 닦아요' کا مطلب کیا ہے؟", options: ["کھانے سے پہلے دانت صاف کریں", "کھانے کے بعد دانت صاف کریں", "کھاتے ہوئے دانت صاف کریں", "سونے سے پہلے دانت صاف کریں"], correct: 1 },
+      { question: "'한국어를 배우는 이유는 무엇입니까?' کا مطلب کیا ہے؟", options: ["آپ کوریَن کیوں سیکھ رہے ہیں؟", "آپ کہاں سیکھتے ہیں؟", "کوریَن زبان کیا ہے؟", "کون سکھاتا ہے؟"], correct: 0 },
+      { question: "'서울은 한국의 수도입니다' کا مطلب کیا ہے؟", options: ["سیول ایک ڈش ہے", "سیول کوریا کا دارالحکومت ہے", "سیول ایک شخص ہے", "سیول ایک صوبہ ہے"], correct: 1 },
+      { question: "'저는 운동을 자주 해요' کا مطلب کیا ہے؟", options: ["میں اکثر ورزش کرتا ہوں", "میں کبھی ورزش نہیں کرتا", "میں روز سوتا ہوں", "میں کھاتا ہوں"], correct: 0 },
+      { question: "'기차는 3시에 출발합니다' کا مطلب کیا ہے؟", options: ["ٹرین 3 بجے روانہ ہوگی", "ٹرین رُکی ہوئی ہے", "ٹرین لیٹ ہے", "ٹرین 3 بجے پہنچے گی"], correct: 0 },
+      { question: "'오늘 날씨가 어때요?' کا مطلب کیا ہے؟", options: ["آج موسم کیسا ہے؟", "آج کہاں ہو؟", "کون آ رہا ہے؟", "کیا وقت ہوا؟"], correct: 0 },
+      { question: "'한국 음식 중에 무엇을 제일 좋아해요?' کا مطلب کیا ہے؟", options: ["آپ کو کونسے کورین کھانے سب سے زیادہ پسند ہیں؟", "آپ کورین کھانا کہاں کھاتے ہیں؟", "کورین کھانا کون پکاتا ہے؟", "آپ کورین کھانے کیوں پسند کرتے ہیں؟"], correct: 0 },
+      { question: "'영화를 보고 집에 갔어요' کا مطلب کیا ہے؟", options: ["فلم دیکھی اور گھر چلا گیا", "گھر جاکر فلم دیکھی", "فلم میں سو گیا", "میں نے کھایا اور گیا"], correct: 0 },
+      { question: "'그 사람이 누구예요?' کا مطلب کیا ہے؟", options: ["وہ کون ہے؟", "وہ کہاں جا رہا ہے؟", "وہ کیا کر رہا ہے؟", "وہ استاد ہے؟"], correct: 0 },
+      { question: "'이것은 얼마예요?' کا مطلب کیا ہے؟", options: ["یہ کتنے کا ہے؟", "یہ کیا ہے؟", "یہ کہاں ہے؟", "آپ کا نام کیا ہے؟"], correct: 0 },
+      { question: "'몇 시에 일어나요?' کا مطلب کیا ہے؟", options: ["آپ کب سوتے ہیں؟", "آپ کتنے بجے اٹھتے ہیں؟", "آپ کہاں ہیں؟", "آپ تیار ہیں؟"], correct: 1 },
+      { question: "'어디에서 만날까요?' کا مطلب کیا ہے؟", options: ["ہم کہاں ملیں؟", "کیا کھائیں؟", "کیا بات کریں؟", "کب ملیں؟"], correct: 0 },
+      { question: "'읽는 중이에요' کا مطلب کیا ہے؟", options: ["پڑھ رہا ہوں", "سو رہا ہوں", "جاگ رہا ہوں", "جا چکا ہوں"], correct: 0 },
+      { question: "'비가 오고 있어요' کا مطلب کیا ہے؟", options: ["بارش ہو رہی ہے", "دھوپ ہے", "سردی ہے", "گرمی ہے"], correct: 0 },
+      { question: "'시험을 잘 봤어요' کا مطلب کیا ہے؟", options: ["میں نے امتحان اچھا دیا", "میں نے امتحان نہیں دیا", "میں نے سو لیا", "میں نے بھول گیا"], correct: 0 },
+      { question: "'오늘은 바빠요' کا مطلب کیا ہے؟", options: ["آج مصروف ہوں", "آج خوش ہوں", "آج سونا ہے", "آج فارغ ہوں"], correct: 0 },
+      { question: "'가고 있어요' کا مطلب کیا ہے؟", options: ["جا رہا ہوں", "آ رہا ہوں", "سو رہا ہوں", "کام کر رہا ہوں"], correct: 0 },
+      { question: "'매운 음식을 먹을 수 있어요?' کا مطلب کیا ہے؟", options: ["کیا آپ تیز مرچ والا کھانا کھا سکتے ہیں؟", "آپ کو میٹھا کھانا پسند ہے؟", "یہ کھانا کیسا ہے؟", "آپ کو کیا پسند ہے؟"], correct: 0 }
+    ];
+
+    const questionContainer = document.getElementById("questions");
+    questionsData.forEach((q, index) => {
+      const qDiv = document.createElement("div");
+      qDiv.className = "question";
+      qDiv.innerHTML = `
+        <p><strong>${index + 1}. ${q.question}</strong></p>
+        <div class="options">
+          ${q.options.map((opt, i) => `
+            <input type="radio" id="q${index}_opt${i}" name="q${index}" value="${i}" />
+            <label for="q${index}_opt${i}">${opt}</label>
+          `).join("")}
+        </div>
+      `;
+      questionContainer.appendChild(qDiv);
+    });
+
+    document.getElementById("quizForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let score = 0;
+      questionsData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name='q${i}']:checked`);
+        if (selected && parseInt(selected.value) === q.correct) {
+          score += 5;
+        }
+      });
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `آپ کا اسکور: ${score} / 200`;
+
+      let grade = "";
+      if (score >= 180) grade = "گریڈ: A+";
+      else if (score >= 160) grade = "گریڈ: A";
+      else if (score >= 140) grade = "گریڈ: B";
+      else if (score >= 110) grade = "گریڈ: C";
+      else grade = "گریڈ: ناکام";
+
+      const messageBox = document.getElementById("finalMessage");
+      if (score >= 110) {
+        messageBox.innerHTML = "🎉 مبارک ہو! آپ کامیاب ہو گئے ہیں!";
+        messageBox.classList.add("pass");
+      } else {
+        messageBox.innerHTML = "❌ معذرت! آپ ناکام ہو گئے ہیں!";
+        messageBox.classList.add("fail");
+      }
+      messageBox.style.display = "block";
+      resultDiv.innerHTML += `<div class='grade'>${grade}</div>`;
+
+      document.querySelectorAll("input[type='radio']").forEach(input => input.disabled = true);
+    });
+
+    let timeLeft = 20 * 60;
+    const timerDisplay = document.getElementById("timer");
+    const timerInterval = setInterval(() => {
+      const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+      const seconds = String(timeLeft % 60).padStart(2, '0');
+      timerDisplay.textContent = `⏳ وقت باقی: ${minutes}:${seconds}`;
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById("quizForm").dispatchEvent(new Event("submit"));
+      }
+      timeLeft--;
+    }, 1000);
+  </script>
+</body>
+</html>

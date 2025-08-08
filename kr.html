@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Korean Language Proficiency Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --primary-dark: #0056b3;
+      --secondary-color: #28a745;
+      --secondary-dark: #1e7e34;
+      --danger-color: #dc3545;
+      --danger-dark: #c82333;
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --border-color: #e9ecef;
+      --text-color: #343a40;
+      --font-poppins: 'Poppins', sans-serif;
+      --font-noto-kr: 'Noto Sans KR', sans-serif;
+    }
+    body {
+      font-family: var(--font-poppins);
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: var(--card-background);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    h1, h2 {
+      text-align: center;
+      color: var(--primary-dark);
+      font-family: var(--font-noto-kr);
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 0;
+    }
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #6c757d;
+    }
+    .timer {
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 20px 0;
+      color: var(--danger-dark);
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: #fff3cd;
+    }
+    .question-section {
+      margin-top: 30px;
+    }
+    .question {
+      background: #fdfdfd;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    .question p {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-family: var(--font-noto-kr);
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #ced4da;
+      margin-top: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      font-family: var(--font-noto-kr);
+      font-size: 1rem;
+    }
+    .options label:hover {
+      background-color: #e9ecef;
+      border-color: var(--primary-color);
+    }
+    .options input[type="radio"] {
+      margin-right: 15px;
+      min-width: 20px;
+      height: 20px;
+      accent-color: var(--primary-color);
+    }
+    .options input[type="radio"]:checked + label {
+      background-color: #d1e7dd;
+      border-color: var(--secondary-color);
+      font-weight: 600;
+      color: var(--secondary-dark);
+    }
+    .options input[type="radio"]:disabled + label {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .options label.incorrect {
+        background-color: #f8d7da;
+        border-color: var(--danger-color);
+    }
+    .options label.correct {
+        background-color: #d1e7dd;
+        border-color: var(--secondary-color);
+    }
+    .submit-btn {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 30px auto;
+      padding: 15px 25px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .submit-btn:hover {
+      background-color: var(--primary-dark);
+    }
+    .result {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .pass {
+      color: var(--secondary-dark);
+    }
+    .fail {
+      color: var(--danger-dark);
+    }
+    .grade {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #495057;
+    }
+    .fixed-center-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--card-background);
+      padding: 40px 60px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 1000;
+      display: none;
+      width: 80%;
+      max-width: 500px;
+    }
+    .fixed-center-message h3 {
+        font-size: 2.5rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    .fixed-center-message p {
+        font-size: 1.2rem;
+        margin: 5px 0;
+    }
+    .fixed-center-message.pass {
+      color: var(--secondary-color);
+    }
+    .fixed-center-message.fail {
+      color: var(--danger-color);
+    }
+    .retake-btn {
+      display: block;
+      margin: 20px auto 0;
+      padding: 12px 25px;
+      font-size: 1rem;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .retake-btn:hover {
+      background-color: #5a6268;
+    }
+    @media(max-width: 768px) {
+      .container {
+        margin: 20px 10px;
+        padding: 15px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .submit-btn {
+        font-size: 1rem;
+        max-width: 100%;
+      }
+      .options label {
+        font-size: 0.9rem;
+      }
+      .fixed-center-message {
+          padding: 30px 40px;
+      }
+      .fixed-center-message h3 {
+          font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Korean Language Proficiency Test</h1>
+    <h2>By Bilal Ahmad</h2>
+    <div class="timer" id="timer">⏳ Remaining Time: 20:00</div>
+    <form id="quizForm">
+      <div id="questions" class="question-section"></div>
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Test</button>
+    </form>
+    <div class="fixed-center-message" id="finalMessage"></div>
+    <div style="text-align:center; margin-top: 20px;">
+      <button onclick="location.reload()" class="retake-btn" id="retakeBtn" style="display:none;">🔁 Retake Test</button>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      { question: "안녕하세요' ka matlab kya hai?", options: ["Hello", "Goodbye", "Thanks", "Sorry"], correct: 0 },
+      { question: "'사랑해요' ka matlab kya hai?", options: ["I hate you", "I like food", "I love you", "See you"], correct: 2 },
+      { question: "'학교' kis cheez ko kehte hain?", options: ["Hospital", "School", "Market", "Park"], correct: 1 },
+      { question: "'고맙습니다' ka Roman Urdu mein matlab?", options: ["Shukriya", "Maaf kijiye", "Khuda Hafiz", "Kya haal hai"], correct: 0 },
+      { question: "'물' ka kya matlab hai?", options: ["Fire", "Water", "Wind", "Earth"], correct: 1 },
+      { question: "'빵' kya hota hai?", options: ["Roti", "Doodh", "Sabzi", "Chawal"], correct: 0 },
+      { question: "'책' kis cheez ko kehte hain?", options: ["Chair", "Bag", "Book", "Pen"], correct: 2 },
+      { question: "'친구' ka kya matlab hai?", options: ["Mother", "Friend", "Teacher", "Boy"], correct: 1 },
+      { question: "'날씨' ka matlab kya hai?", options: ["Weather", "Clock", "Night", "Moon"], correct: 0 },
+      { question: "'의자' ka matlab kya hai?", options: ["Table", "Chair", "Window", "Fan"], correct: 1 },
+      { question: "'-고 있다' ka istemal kis liye hota hai?", options: ["Past tense", "Present progressive", "Future tense", "Passive voice"], correct: 1 },
+      { question: "'-았/었어요' kis tense ka nishan hai?", options: ["Present", "Past", "Future", "Imperative"], correct: 1 },
+      { question: "'-고 싶다' kis cheez ka izhar hai?", options: ["Advice", "Plan", "Desire", "Order"], correct: 2 },
+      { question: "'지만' ka istemal kab hota hai?", options: ["Comparison", "Contrast", "Time", "Place"], correct: 1 },
+      { question: "'-기 때문에' ka matlab kya hota hai?", options: ["Because", "Although", "If", "Then"], correct: 0 },
+      { question: "'-으세요' kis type ka sentence hota hai?", options: ["Request", "Statement", "Negative", "Conditional"], correct: 0 },
+      { question: "'-지 마세요' ka matlab kya hai?", options: ["Please don't", "Please do", "Must", "Have to"], correct: 0 },
+      { question: "'-ㄹ까요?' ka istemal kis liye hota hai?", options: ["Suggestion", "Command", "Apology", "Past"], correct: 0 },
+      { question: "'에서' kis jagah ka nishan hai?", options: ["Location", "Direction", "Time", "Verb"], correct: 0 },
+      { question: "'-(으)ㄹ 거예요' ka matlab kya hota hai?", options: ["Past", "Present", "Future", "Negative"], correct: 2 },
+      { question: "'공부하고 있어요' ka matlab kya hai?", options: ["I'm playing", "I'm studying", "I'm sleeping", "I'm eating"], correct: 1 },
+      { question: "'밥을 먹은 후에 이를 닦아요' ka sahih tarjuma kya hai?", options: ["Brush teeth before eating", "Sleep after eating", "Brush after eating", "Eat while brushing"], correct: 2 },
+      { question: "'한국어를 배우는 이유는 무엇입니까?' ka kya matlab hai?", options: ["Why are you learning Korean?", "Where do you study Korean?", "What is Korean language?", "Who teaches Korean?"], correct: 0 },
+      { question: "'서울은 한국의 수도입니다' ka matlab kya hai?", options: ["Seoul is a Korean dish", "Seoul is the capital of Korea", "Seoul is a person", "Seoul is a province"], correct: 1 },
+      { question: "'저는 운동을 자주 해요' ka kya matlab hai?", options: ["I rarely exercise", "I eat often", "I exercise often", "I sleep often"], correct: 2 },
+      { question: "'기차는 3시에 출발합니다' ka matlab kya hai?", options: ["Train leaves at 3", "Train arrives at 3", "Train stops at 3", "Train is late"], correct: 0 },
+      { question: "'오늘 날씨가 어때요?' ka kya matlab hai?", options: ["What's the time?", "What's the weather today?", "Where are you?", "Who is she?"], correct: 1 },
+      { question: "'한국 음식 중에 무엇을 제일 좋아해요?' ka matlab kya hai?", options: ["Which Korean dish do you like most?", "Who is Korean cook?", "Where is Korean food shop?", "Is this Korean food?"], correct: 0 },
+      { question: "'매운 음식을 먹을 수 있어요?' ka kya matlab hai?", options: ["Can you eat spicy food?", "Do you hate sweet food?", "What is spicy food?", "Don't eat it"], correct: 0 },
+      { question: "'영화를 보고 집에 갔어요' ka sahih tarjuma kya hai?", options: ["I watched a movie and went home", "I went to movie and slept", "I slept and watched a movie", "I ate and went home"], correct: 0 },
+      { question: "'그 사람이 누구예요?' ka matlab kya hai?", options: ["Who is that person?", "What is he doing?", "Where is he going?", "Is he a teacher?"], correct: 0 },
+      { question: "'이것은 얼마예요?' ka matlab kya hai?", options: ["How is it?", "What is your name?", "How much is this?", "Where is it?"], correct: 2 },
+      { question: "'몇 시에 일어나요?' ka kya matlab hai?", options: ["When do you sleep?", "What time do you wake up?", "Where are you now?", "Are you ready?"], correct: 1 },
+      { question: "'어디에서 만날까요?' ka kya matlab hai?", options: ["Where shall we meet?", "What shall we eat?", "Who shall we call?", "Why shall we meet?"], correct: 0 },
+      { question: "'한국에 가 본 적 있어요?' ka kya matlab hai?", options: ["Have you ever been to Korea?", "Do you speak Korean?", "Do you like Korea?", "Are you from Korea?"], correct: 0 },
+      { question: "'읽는 중이에요' kis tense ka hissa hai?", options: ["Past", "Future", "Present continuous", "Negative"], correct: 2 },
+      { question: "'비가 오고 있어요' ka matlab kya hai?", options: ["It's raining", "It's sunny", "It's snowing", "It's hot"], correct: 0 },
+      { question: "'시험을 잘 봤어요' ka kya matlab hai?", options: ["I failed the test", "I slept in test", "I did well in the exam", "I didn’t attend test"], correct: 2 },
+      { question: "'오늘은 바빠요' ka matlab kya hai?", options: ["I'm busy today", "I'm sad today", "I'm happy today", "I'm sleeping today"], correct: 0 },
+      { question: "'가고 있어요' ka matlab kya hai?", options: ["I'm eating", "I'm going", "I'm running", "I'm resting"], correct: 1 }
+    ];
+
+    const questionContainer = document.getElementById("questions");
+    const submitBtn = document.getElementById("submitBtn");
+    const finalMessage = document.getElementById("finalMessage");
+    const retakeBtn = document.getElementById("retakeBtn");
+
+    function displayQuestions() {
+      questionContainer.innerHTML = '';
+      questionsData.forEach((q, index) => {
+        const qDiv = document.createElement("div");
+        qDiv.className = "question";
+        qDiv.innerHTML = `
+          <p><strong>${index + 1}. ${q.question}</strong></p>
+          <div class="options">
+            ${q.options.map((opt, i) => `
+              <input type="radio" id="q${index}_opt${i}" name="q${index}" value="${i}" />
+              <label for="q${index}_opt${i}">${opt}</label>
+            `).join("")}
+          </div>
+        `;
+        questionContainer.appendChild(qDiv);
+      });
+    }
+
+    document.getElementById("quizForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      clearInterval(timerInterval);
+      submitBtn.disabled = true;
+
+      let score = 0;
+      questionsData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name='q${i}']:checked`);
+        if (selected) {
+            const selectedLabel = document.querySelector(`label[for='${selected.id}']`);
+            if (parseInt(selected.value) === q.correct) {
+                score += 5;
+                selectedLabel.classList.add('correct');
+            } else {
+                selectedLabel.classList.add('incorrect');
+                const correctLabel = document.querySelector(`label[for='q${i}_opt${q.correct}']`);
+                correctLabel.classList.add('correct');
+            }
+        }
+      });
+      
+      let grade = "";
+      if (score >= 180) grade = "A+";
+      else if (score >= 160) grade = "A";
+      else if (score >= 140) grade = "B";
+      else if (score >= 110) grade = "C";
+      else grade = "You Are Failed";
+
+      if (score >= 110) {
+        finalMessage.innerHTML = `<h3>🎉 مبارک ہو! آپ پاس ہوگئے ہیں۔</h3><p>آپ کا اسکور ہے: <strong>${score} / 200</strong></p><p>آپ کا گریڈ ہے: <strong>${grade}</strong></p>`;
+        finalMessage.classList.add("pass");
+        finalMessage.style.display = "block";
+      } else {
+        finalMessage.innerHTML = `<h3>❌ معذرت! آپ فیل ہوگئے ہیں۔</h3><p>آپ کا اسکور ہے: <strong>${score} / 200</strong></p><p>آپ کا گریڈ ہے: <strong>${grade}</strong></p>`;
+        finalMessage.classList.add("fail");
+        finalMessage.style.display = "block";
+      }
+      
+      retakeBtn.style.display = "block";
+      
+      document.querySelectorAll("input[type='radio']").forEach(input => input.disabled = true);
+    });
+
+    let timeLeft = 20 * 60;
+    const timerDisplay = document.getElementById("timer");
+    const timerInterval = setInterval(() => {
+      const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+      const seconds = String(timeLeft % 60).padStart(2, '0');
+      timerDisplay.textContent = `⏳ Remaining Time: ${minutes}:${seconds}`;
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById("quizForm").dispatchEvent(new Event("submit"));
+      }
+      timeLeft--;
+    }, 1000);
+
+    window.onload = displayQuestions;
+  </script>
+</body>
+</html>
