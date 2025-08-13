@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>EPS-TOPIK Korean Vocabulary Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    /* Professional and Clean CSS */
+    :root {
+        --brand: #2563eb;
+        --accent: #059669;
+        --danger: #ef4444;
+        --ink: #1f2937;
+        --muted: #6b7280;
+        --card: #ffffff;
+        --bg: #f3f4f6;
+        --ring: rgba(37, 99, 235, 0.3);
+    }
+    
+    *, *:before, *:after {
+        box-sizing: border-box;
+    }
+    
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+    }
+    
+    .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: linear-gradient(90deg, #ffffff, #e6f7ff);
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .brand {
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: var(--brand);
+    }
+    
+    .brand small {
+        display: block;
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    
+    #timer {
+        font-weight: 800;
+        color: var(--danger);
+        font-size: 1.1rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 0.5rem;
+        background: #fff;
+        border: 1px solid #fee2e2;
+        box-shadow: 0 0 0 3px var(--ring);
+    }
+    
+    main {
+        max-width: 1000px;
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+    }
+    
+    h1 {
+        margin: 0.5rem 0 0.5rem 0;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 900;
+    }
+    
+    .subtitle {
+        color: var(--muted);
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+    }
+    
+    .grid {
+        display: grid;
+        gap: 1rem;
+    }
+    
+    .question {
+        background: var(--card);
+        padding: 1.25rem;
+        border-radius: 1rem;
+        border: 1px solid #e5e7eb;
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .question:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+    
+    .qhead {
+        font-weight: 700;
+        margin: 0 0 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .opt {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .opt:hover {
+        background: #eff6ff;
+        border-color: var(--brand);
+    }
+    
+    .opt input[type="radio"] {
+        margin-right: 0.75rem;
+        accent-color: var(--brand);
+    }
+    
+    .actions {
+        position: sticky;
+        bottom: 1.5rem;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    
+    .btn {
+        appearance: none;
+        border: none;
+        border-radius: 0.75rem;
+        padding: 1rem 2rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 1rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .btn-primary {
+        background: var(--accent);
+        color: #fff;
+    }
+    
+    .btn-primary:hover {
+        background: #047857;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .float-timer {
+        position: fixed;
+        right: 1rem;
+        top: 5rem;
+        z-index: 1001;
+        background: var(--ink);
+        color: #fff;
+        padding: 0.5rem 0.8rem;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.9rem;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    }
+    
+    #resultOverlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        background: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+    
+    #resultBox {
+        width: min(520px, 92vw);
+        background: var(--card);
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        border: 1px solid #e5e7eb;
+        text-align: center;
+    }
+    
+    #resultMessage {
+        font-size: 1.8rem;
+        font-weight: 900;
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+    
+    .pass {
+        color: var(--accent);
+    }
+    
+    .fail {
+        color: var(--danger);
+    }
+    
+    #resultScore, #resultGrade, #resultTime {
+        margin: 0.5rem 0;
+        color: var(--ink);
+        font-weight: 700;
+    }
+    
+    #resultTip {
+        color: var(--muted);
+        margin-top: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .dev-ribbon {
+        margin: 2rem auto 2.5rem;
+        max-width: 1000px;
+        background: linear-gradient(90deg, #111827, #1f2937);
+        color: #fff;
+        padding: 1rem 1.25rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        font-size: 0.9rem;
+    }
+    
+    .dev-ribbon small {
+        opacity: 0.8;
+        font-weight: 600;
+    }
+    
+    @media (min-width: 700px) {
+        .grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="brand">
+        BILAL AHMAD presents
+        <small>EPS-TOPIK Korean Vocabulary Test</small>
+    </div>
+    <div id="timer" aria-live="polite">Time Left: 10:00</div>
+</div>
+
+<div class="float-timer" id="floatTimer">10:00</div>
+
+<main>
+    <h1>EPS-TOPIK (40 Questions)</h1>
+    <p class="subtitle">GOOD LUCK DEAR</p>
+
+    <form id="quizForm" class="grid" aria-label="EPS-TOPIK Test"></form>
+
+    <div class="actions">
+        <button type="button" class="btn btn-primary" onclick="submitQuiz()">Submit Test</button>
+    </div>
+
+    <div class="dev-ribbon">
+        <span>Developed by <u>BILAL AHMAD</u> • <small>Developer</small></span>
+    </div>
+</main>
+
+<div id="resultOverlay" role="dialog" aria-modal="true">
+    <div id="resultBox">
+        <div id="resultMessage"></div>
+        <div id="resultScore"></div>
+        <div id="resultGrade"></div>
+        <div id="resultTime"></div>
+        <div id="resultTip"></div>
+    </div>
+</div>
+
+<script>
+const PASS_MARK = 110;
+let countdownRef = null;
+let secondsLeft = 600; // 10 minutes
+let submitted = false;
+
+const questions = [
+    {q: "‘맛이 좋다’ کا مطلب کیا ہے؟", options: ["مرچ والا ہونا", "مزے دار ہونا", "میٹھا ہونا", "نمکین ہونا"], answer: "مزے دار ہونا"},
+    {q: "‘맵다’ کا مطلب کیا ہے؟", options: ["مرچ والا ہونا", "کھٹا ہونا", "نمکین ہونا", "پھیکا ہونا"], answer: "مرچ والا ہونا"},
+    {q: "‘달다’ کا مطلب کیا ہے؟", options: ["میٹھا ہونا", "نمکین ہونا", "مونگ پھلی سا ذائقہ", "کڑوا ہونا"], answer: "میٹھا ہونا"},
+    {q: "‘짜다’ کا مطلب کیا ہے؟", options: ["نمکین ہونا", "کڑوا ہونا", "میٹھا ہونا", "پھیکا ہونا"], answer: "نمکین ہونا"},
+    {q: "‘싱겁다’ کا مطلب کیا ہے؟", options: ["پھیکا ہونا", "کڑوا ہونا", "کھٹا ہونا", "مونگ پھلی سا ذائقہ"], answer: "پھیکا ہونا"},
+    {q: "‘시다’ کا مطلب کیا ہے؟", options: ["کھٹا ہونا", "میٹھا ہونا", "مرچ والا ہونا", "کڑوا ہونا"], answer: "کھٹا ہونا"},
+    {q: "‘떡볶이’ کس قسم کا کھانا ہے؟", options: ["میٹھا کیک", "مرچ والا چاولی کیک ڈِش", "نوڈلز", "گرِل مچھلی"], answer: "مرچ والا چاولی کیک ڈِش"},
+    {q: "‘소고기’ کو اردو میں کیا کہتے ہیں؟", options: ["سور کا گوشت", "گائے کا گوشت", "چکن", "مچھلی"], answer: "گائے کا گوشت"},
+    {q: "‘마늘’ کا مطلب کیا ہے؟", options: ["کالی مرچ", "لہسن", "گاجر", "نمک"], answer: "لہسن"},
+    {q: "‘간장’ کا مطلب کیا ہے؟", options: ["سویا ساس", "سرکہ", "کالی مرچ", "چینی"], answer: "سویا ساس"},
+    {q: "‘끓이다’ کا مطلب کیا ہے؟", options: ["گرِل کرنا", "یخنی میں ابالنا", "کاٹنا/سلائس کرنا", "تلنا"], answer: "یخنی میں ابالنا"},
+    {q: "‘볶다’ کا مطلب کیا ہے؟", options: ["بھوننا (سٹر فرائی)", "گرِل کرنا", "ابالنا", "بھاپ میں پکانا"], answer: "بھوننا (سٹر فرائی)"},
+    {q: "3:45 AM کو کوریائی میں کیسے کہیں گے؟", options: ["오전 세 시 사십오 분", "오전 네 시 마흔다섯 분", "오전 세 시 삼십오 분", "오전 세 시 오십오 분"], answer: "오전 세 시 사십오 분"},
+    {q: "10,000 کو کوریائی میں کیا کہتے ہیں؟", options: ["천", "만", "십만", "백만"], answer: "만"},
+    {q: "‘유명하다’ کا مطلب کیا ہے؟", options: ["خوبصورت ہونا", "مشہور ہونا", "بڑا ہونا", "آرام دہ ہونا"], answer: "مشہور ہونا"},
+    {q: "‘아름답다’ کا مطلب کیا ہے؟", options: ["خوبصورت ہونا", "مشہور ہونا", "برا ہونا", "گندا ہونا"], answer: "خوبصورت ہونا"},
+    {q: "‘시끄럽다’ کا اُلٹ کیا ہے؟", options: ["조용하다", "넓다", "많다", "깨끗하다"], answer: "조용하다"},
+    {q: "‘더럽다’ کا اُلٹ کیا ہے؟", options: ["좁다", "깨끗하다", "불편하다", "조용하다"], answer: "깨끗하다"},
+    {q: "‘빨간색’ کس رنگ کو کہتے ہیں؟", options: ["لال", "سبز", "نیلا", "پیلا"], answer: "لال"},
+    {q: "‘모자’ کا مطلب کیا ہے؟", options: ["ٹوپی", "شرٹ", "ڈریس", "عینک"], answer: "ٹوپی"},
+    {q: "‘짐을 싸다’ کا مطلب کیا ہے؟", options: ["سامان باندھنا", "سامان کھولنا", "ٹکٹ خریدنا", "منتقل ہونا"], answer: "سامان باندھنا"},
+    {q: "سفر میں ‘묵다’ کا مطلب؟", options: ["ٹھہرنا/رہنا", "کھانا", "منتقل ہونا", "گھر دیکھنا"], answer: "ٹھہرنا/رہنا"},
+    {q: "‘불편하다’ کا مطلب کیا ہے؟", options: ["غیر آرام دہ ہونا", "آرام دہ ہونا", "سستا ہونا", "محفوظ ہونا"], answer: "غیر آرام دہ ہونا"},
+    {q: "‘아파트’ کا مطلب کیا ہے؟", options: ["اپارٹمنٹ/فلیٹ", "اسٹوڈیو اپارٹمنٹ", "گھر", "ڈارمیٹری/ہاسٹل"], answer: "اپارٹمنٹ/فلیٹ"},
+    {q: "‘계약하다’ کا مطلب کیا ہے؟", options: ["منتقل ہونا", "معاہدہ کرنا/دستخط کرنا", "سامان باندھنا", "گھر تلاش کرنا"], answer: "معاہدہ کرنا/دستخط کرنا"},
+    {q: "5:20 PM کو کوریائی میں کیسے کہیں گے؟", options: ["오전 다섯 시 이십 분", "오후 다섯 시 이십 분", "오후 여섯 시 이십 분", "오전 다섯 시 이십 분"], answer: "오후 다섯 시 이십 분"},
+    {q: "50,000 کو کوریائی میں کیا کہتے ہیں؟", options: ["오만", "만", "십만", "천"], answer: "오만"},
+    {q: "‘운동화’ کا مطلب کیا ہے؟", options: ["جوگرز/سنیکرز", "چپل", "لانگ بوٹس", "فارمل جوتے"], answer: "جوگرز/سنیکرز"},
+    {q: "‘올라가다’ کا مطلب کیا ہے؟", options: ["اوپر جانا", "نیچے جانا", "اندر آنا", "سڑک پار کرنا"], answer: "اوپر جانا"},
+    {q: "‘들어오다’ کا مطلب کیا ہے؟", options: ["اندر جانا", "اندر آنا", "باہر آنا", "باہر جانا"], answer: "اندر آنا"},
+    {q: "‘건너가다’ کا مطلب کیا ہے؟", options: ["سڑک پار کرنا", "باہر جانا", "اندر جانا", "اوپر آنا"], answer: "سڑک پار کرنا"},
+    {q: "‘오른쪽’ کا مطلب کیا ہے؟", options: ["بائیں", "دائیں", "سامنے/آمنے سامنے", "ساتھ"], answer: "دائیں"},
+    {q: "‘건너편’ کا مطلب کیا ہے؟", options: ["سامنے/آمنے سامنے", "ساتھ", "سامنے (عمارت کے آگے)", "پیچھے"], answer: "سامنے/آمنے سامنے"},
+    {q: "‘이쪽’ کا مطلب کیا ہے؟", options: ["یہ طرف/یہ سمت", "وہ طرف", "ادھر کہیں دور", "کدھر؟"], answer: "یہ طرف/یہ سمت"},
+    {q: "‘그쪽’ کا مطلب کیا ہے؟", options: ["وہ طرف/وہ سمت", "یہ طرف", "ادھر کہیں دور", "کدھر؟"], answer: "وہ طرف/وہ سمت"},
+    {q: "‘층’ کا مطلب کیا ہے؟", options: ["منزل (فلور)", "چوک/چوراہا", "زیرِ زمین", "سمت"], answer: "منزل (فلور)"},
+    {q: "‘횡단보도’ کا مطلب کیا ہے؟", options: ["پیدل کراسنگ (Crosswalk)", "اوور پاس", "چوک/چوراہا", "زیرِ زمین"], answer: "پیدل کراسنگ (Crosswalk)"},
+    {q: "‘좋다’ کا اُلٹ کیا ہے؟", options: ["나쁘다", "편하다", "부족하다", "많다"], answer: "나쁘다"},
+    {q: "‘많다’ کا اُلٹ کیا ہے؟", options: ["편하다", "나쁘다", "부족하다", "조용하다"], answer: "부족하다"},
+    {q: "‘섬’ کا مطلب کیا ہے؟", options: ["جزیرہ", "پہاڑ", "جھیل", "دریا"], answer: "جزیرہ"}
+];
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function mmss(s){
+    const m = String(Math.floor(s/60)).padStart(2,'0');
+    const sec = String(s%60).padStart(2,'0');
+    return `${m}:${sec}`;
+}
+function paintTimer(){
+    const top = document.getElementById('timer');
+    const bubble = document.getElementById('floatTimer');
+    const t = mmss(secondsLeft);
+    top.textContent = `Time Left: ${t}`;
+    bubble.textContent = t;
+}
+function startTimer(){
+    paintTimer();
+    countdownRef = setInterval(()=>{
+        if (submitted) { clearInterval(countdownRef); return; }
+        secondsLeft--;
+        paintTimer();
+        if (secondsLeft < 0){
+            clearInterval(countdownRef);
+            submitQuiz(true);
+        }
+    },1000);
+}
+
+function loadQuiz(){
+    const form = document.getElementById("quizForm");
+    questions.forEach((item, index) => {
+        const shuffledOptions = shuffleArray([...item.options]);
+        let correctIndex = -1;
+
+        shuffledOptions.forEach((opt, i) => {
+            if (opt === item.answer) {
+                correctIndex = i;
+            }
+        });
+
+        let html = `<fieldset class="question" data-correct="${correctIndex}">
+                        <legend class="qhead">${index+1}. ${item.q}</legend>`;
+        shuffledOptions.forEach((opt, i) => {
+            html += `<label class="opt">
+                        <input type="radio" name="q${index}" value="${i}"> ${opt}
+                     </label>`;
+        });
+        html += `</fieldset>`;
+        form.insertAdjacentHTML('beforeend', html);
+    });
+}
+
+function computeGrade(score){
+    if(score >= 190) return "A+";
+    if(score >= 170) return "A";
+    if(score >= 150) return "B";
+    if(score >= 110) return "C";
+    return "Fail";
+}
+function submitQuiz(auto=false){
+    if (submitted) return;
+    submitted = true;
+    if (countdownRef) clearInterval(countdownRef);
+
+    let score = 0;
+    const allQuestions = document.querySelectorAll('.question');
+    allQuestions.forEach((qElement, index) => {
+        const selected = qElement.querySelector(`input[name="q${index}"]:checked`);
+        const correctIndex = parseInt(qElement.dataset.correct, 10);
+        
+        if(selected && parseInt(selected.value, 10) === correctIndex){
+            score += 5;
+        }
+    });
+
+    const grade = computeGrade(score);
+    const passed = score >= PASS_MARK;
+
+    const msgEl = document.getElementById("resultMessage");
+    const scoreEl = document.getElementById("resultScore");
+    const gradeEl = document.getElementById("resultGrade");
+    const timeEl = document.getElementById("resultTime");
+    const tipEl = document.getElementById("resultTip");
+
+    msgEl.className = passed ? 'pass' : 'fail';
+    msgEl.textContent = passed ? "🎉 Congratulations! آپ پاس ہو گئے۔" : "❌ Sorry! آپ فیل ہو گئے۔";
+    scoreEl.innerHTML = `<strong>Score:</strong> ${score} / 200`;
+    gradeEl.innerHTML = `<strong>Grade:</strong> ${grade}`;
+    timeEl.innerHTML = `<strong>Time Remaining:</strong> ${Math.max(secondsLeft,0)}s (${mmss(Math.max(secondsLeft,0))})`;
+    tipEl.textContent = auto ? "وقت ختم — آپ کا ٹیسٹ خودکار طور پر جمع ہو گیا۔" : "آپ نے ٹیسٹ جمع کر دیا ہے۔";
+
+    document.getElementById("resultOverlay").style.display = "flex";
+}
+window.addEventListener('load', ()=>{
+    loadQuiz();
+    startTimer();
+});
+</script>
+</body>
+</html>
